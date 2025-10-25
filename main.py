@@ -1,6 +1,14 @@
+import os
 import discord
 from discord.ext import commands
 from discord import app_commands
+from dotenv import load_dotenv
+from keep_alive import keep_alive # NEW
+
+keep_alive() # NEW
+
+load_dotenv()
+TOKEN = os.getenv('DISCORD_TOKEN')
 
 class Client(commands.Bot):
     async def on_ready(self):
@@ -109,4 +117,4 @@ async def menu(interaction: discord.Interaction):
 
 
 
-client.run('MTQzMTQ5NjYwMzYzMzQ1MTIwMA.GuR7NV.M_raEMKDtrwndxR15CfcRqYs3TFUdCT24xmAiA')
+client.run(TOKEN)
