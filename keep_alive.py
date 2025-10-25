@@ -3,9 +3,9 @@ from threading import Thread
 
 app = Flask('neck hurt')
 
-@app.route('/')
-def home():
-    return "Bot dang chay!"
+@app.route('/heathz')
+def health_check():
+    return 'Bot dang chay!', 200
 
 def run():
     app.run(host='0.0.0.0', port=8080)
