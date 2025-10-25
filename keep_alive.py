@@ -1,7 +1,7 @@
 from flask import Flask
 from threading import Thread
 
-app = Flask('')
+app = Flask('neck hurt')
 
 @app.route('/')
 def home():

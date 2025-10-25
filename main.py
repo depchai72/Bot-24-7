@@ -29,6 +29,9 @@ class Client(commands.Bot):
             await message.channel.send(f'Hello mấy cháu')
         if message.content.startswith('depchai ngu'):
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
+        if message.content.startswith('challenge'):
+            await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
+            await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
 
 intents = discord.Intents.default()
 intents.message_content = True
