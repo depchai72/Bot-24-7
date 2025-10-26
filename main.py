@@ -1,9 +1,11 @@
 import os
 import discord
+import random
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 from keep_alive import keep_alive
+from datetime import datetime, timedelta
 
 keep_alive()
 
@@ -12,7 +14,6 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
-    @client.event 
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
 
@@ -39,6 +40,15 @@ class Client(commands.Bot):
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
+        if message.content.startswith('𒈓trickortreat'):
+            await message.channel.send(f'Phần thưởng của bạn là...')
+            num = (random.randint(1,2))
+            if num==1:
+                await message.channel.send(f'1 viên kẹo🍬')
+            elif num==2:
+                await message.channel.send(f'Mute 1 phút <:thosewhodontknow:1393572894558126121>')
+                duration = timedelta(minutes=1)
+                await message.author.timeout(duration, reason = 'hjhj')
         await self.process_commands(message)
 
 intents = discord.Intents.default()
@@ -137,8 +147,29 @@ async def ff(interaction: discord.Interaction, name: str):
 
 
 
+@client.tree.command(name="uhh", description="Tạo 100 chữ à ừ ờ ừm ngẫu nhiên", guild=GUILD_ID)
+async def uhh(interaction: discord.Interaction):
+    letters1 = ''
+    for i in range(100):
+        numbers = (random.randint(1, 4))
+        if numbers==1:
+            letters="à"
+        elif numbers==2:
+            letters="ừ"
+        elif numbers==3:
+            letters="ờ"
+        elif numbers==4:
+            letters="ừm"
+        letters1 = (f'{letters1}{letters} ')
+    result = (letters1)
+    await interaction.response.send_message(result)
+
+
+
+@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
+async def chuvan(interaction: discord.Interaction, emoji: str):
+    e = emoji
+    t = '<:empty:1423996972431577240>'
+    await interaction.response.send_message(f"{e}{t}{t}{e}{e}{e}{e}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{e}{e}{e}{e}{e}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{e}{e}{e}{e}{t}{t}{e}")
 
 client.run(TOKEN)
-
-
-
