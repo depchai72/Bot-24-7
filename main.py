@@ -5,7 +5,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 from keep_alive import keep_alive # NEW
 
-keep_alive() # NEW
+keep_alive.keep_alive() # NEW
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -120,6 +120,7 @@ class MenuView(discord.ui.View):
 @client.tree.command(name="menu", description="Menu", guild=GUILD_ID)
 async def menu(interaction: discord.Interaction):
     await interaction.response.send_message(view=MenuView())
+
 
 
 
