@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
-from keep_alive import keep_alive # NEW
+from keep_alive.py import keep_alive # NEW
 
 keep_alive() # NEW
 
@@ -29,9 +29,14 @@ class Client(commands.Bot):
             await message.channel.send(f'Hello mấy cháu')
         if message.content.startswith(f'depchai ngu'):
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
-        if message.content.startswith('challenge'):
+        if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
+        if 'tick' in message.content:
+            await message.add_reaction('<a:acn_tickden:1413824083413696652>')
+            await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
+            await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
+            await message.add_reaction('<a:a_tickvang:1422566122305097830>')
         await self.process_commands(message)
 
 intents = discord.Intents.default()
@@ -120,6 +125,13 @@ class MenuView(discord.ui.View):
 @client.tree.command(name="menu", description="Menu", guild=GUILD_ID)
 async def menu(interaction: discord.Interaction):
     await interaction.response.send_message(view=MenuView())
+
+
+
+
+@client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
+async def ff(interaction: discord.Interaction, name: str):
+    await interaction.response.send_message(f'꧁༺,{name}ᴾᴿᴼシ')
 
 
 
