@@ -14,6 +14,9 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
+    def __init__(self):
+        super().__init__(command_prefix="$", intents=intents)
+        
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
 
@@ -55,7 +58,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 intents.guilds = True
-client = Client(command_prefix="𒈓", intents=intents)
+client = Client()
 
 GUILD_ID = discord.Object(id=1374705648234659972)
 
