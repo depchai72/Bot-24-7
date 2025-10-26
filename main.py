@@ -13,6 +13,7 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 class Client(commands.Bot):
+    @client.event 
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
 
@@ -139,4 +140,5 @@ async def ff(interaction: discord.Interaction, name: str):
 
 
 client.run(TOKEN)
+
 
