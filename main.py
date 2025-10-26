@@ -123,6 +123,4 @@ async def menu(interaction: discord.Interaction):
 
 
 
-
 client.run(TOKEN)
-
