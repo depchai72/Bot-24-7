@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
+from keep_alive import keep_alive
 import subprocess
 subprocess.Popen(["python", "keep_alive.py"])
 
@@ -138,3 +139,4 @@ async def ff(interaction: discord.Interaction, name: str):
 
 
 client.run(TOKEN)
+
