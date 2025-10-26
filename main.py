@@ -3,11 +3,10 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
-from keep_alive import keep_alive # NEW
 import subprocess
 subprocess.Popen(["python", "keep_alive.py"])
 
-keep_alive() # NEW
+keep_alive()
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -134,6 +133,7 @@ async def menu(interaction: discord.Interaction):
 @client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
 async def ff(interaction: discord.Interaction, name: str):
     await interaction.response.send_message(f'꧁༺,{name}ᴾᴿᴼシ')
+
 
 
 
