@@ -3,7 +3,9 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
-from keep_alive.py import keep_alive # NEW
+from keep_alive import keep_alive # NEW
+import subprocess
+subprocess.Popen(["python", "keep_alive.py"])
 
 keep_alive() # NEW
 
