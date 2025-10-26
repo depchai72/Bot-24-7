@@ -172,4 +172,10 @@ async def chuvan(interaction: discord.Interaction, emoji: str):
     t = '<:empty:1423996972431577240>'
     await interaction.response.send_message(f"{e}{t}{t}{e}{e}{e}{e}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{e}{e}{e}{e}{e}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{e}{e}{e}{e}{t}{t}{e}")
 
-client.run(TOKEN)
+
+
+try:
+    client.run(TOKEN)
+    print("mẹ ơi con làm được rồi🥹🥹")
+except Exception as e:
+    print("Lỗi khi chạy bot:", e)
