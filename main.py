@@ -5,7 +5,7 @@ from discord import app_commands
 from dotenv import load_dotenv
 from keep_alive import keep_alive # NEW
 
-keep_alive.keep_alive() # NEW
+keep_alive() # NEW
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -125,3 +125,4 @@ async def menu(interaction: discord.Interaction):
 
 
 client.run(TOKEN)
+
