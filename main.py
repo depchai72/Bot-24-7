@@ -27,14 +27,17 @@ class Client(commands.Bot):
             return
         if self.user in message.mentions:
             await message.channel.send(f'Hello mấy cháu')
-        if message.content.startswith('depchai ngu'):
+        if message.content.startswith(f'depchai ngu'):
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
         if message.content.startswith('challenge'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
+        await self.process_commands(message)
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
+intents.guilds = True
 client = Client(command_prefix="𒈓", intents=intents)
 
 GUILD_ID = discord.Object(id=1374705648234659972)
