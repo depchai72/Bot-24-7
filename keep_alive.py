@@ -1,9 +1,9 @@
 from flask import Flask
 from threading import Thread
 
-app = Flask('neck hurt')
+app = Flask('')
 
-@app.route('/heathz')
+@app.route('/healthz')
 def health_check():
     return 'Bot dang chay!', 200
 
