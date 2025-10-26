@@ -4,7 +4,7 @@ from threading import Thread
 app = Flask('')
 
 @app.route('/healthz')
-def home():
+def health_check():
     return 'me may beo!', 200
 
 def run():
@@ -13,3 +13,4 @@ def run():
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
