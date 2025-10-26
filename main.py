@@ -176,6 +176,9 @@ async def chuvan(interaction: discord.Interaction, emoji: str):
     await interaction.response.send_message(f"{e}{t}{t}{e}{e}{e}{e}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{e}{e}{e}{e}{e}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{e}{e}{e}{e}{t}{t}{e}")
 
 
+import time
+print("🕒 Đang chờ 10 giây trước khi khởi động bot...")
+time.sleep(10)
 
 try:
     client.run(TOKEN)
