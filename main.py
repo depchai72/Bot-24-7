@@ -196,6 +196,37 @@ async def chuvan(interaction: discord.Interaction, emoji: str):
     await interaction.response.send_message(f"{e}{t}{t}{e}{e}{e}{e}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{e}{e}{e}{e}{e}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{e}{e}{e}{e}{t}{t}{e}")
 
 
+
+class CounterButton(discord.ui.View):
+    def __init__(self, limit=500):
+        super().__init__(timeout=None)  # timeout=None = không bao giờ tắt
+        self.value = 0
+        self.last_user = "Chưa có ai bấm <:ruabatngo:1420409581598806107>"
+        self.limit = limit
+
+    @discord.ui.button(label="0", style=discord.ButtonStyle.green)
+    async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.value >= self.limit:
+            await interaction.response.send_message(
+                f"Đã đạt giới hạn {self.limit} lượt bấm!",
+                ephemeral=True)
+            return
+        self.value += 1
+        self.last_user = interaction.user.display_name
+        button.label = str(self.value)
+        await interaction.response.edit_message(
+            content=f"**Người bấm gần nhất:** {self.last_user}",
+            view=self
+        )
+
+@client.tree.command(name="counter", description="Tạo một nút bấm đếm số 📈")
+async def counter(interaction: discord.Interaction):
+    view = CounterButton()
+    await interaction.response.send_message(
+        content="**Bấm vào nút để tăng số!**", view=view)
+
+
+
 import time
 print("🕒 Đang chờ 10 giây trước khi khởi động bot...")
 time.sleep(10)
