@@ -32,9 +32,12 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
         if self.user in message.mentions:
-            await message.channel.send(f'Hello mấy cháu')
+            await message.add_reaction('🇭')
+            await message.add_reaction('🇮')
         if message.content.startswith(f'depchai ngu'):
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
+        if 'ban' in message.content and self.user in message.mentions:
+            await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
         if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
@@ -145,8 +148,25 @@ async def menu(interaction: discord.Interaction):
 
 
 @client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
-async def ff(interaction: discord.Interaction, name: str):
-    await interaction.response.send_message(f'꧁༺,{name}ᴾᴿᴼシ')
+@app_commands.describe(chudau="Chọn chữ đầu",chucuoi="Chọn chữ cuối")
+@app_commands.choices(
+    chudau=[
+       app_commands.Choice(name="꧁༺", value="canh"),
+       app_commands.Choice(name="★彡", value="sao"),
+       app_commands.Choice(name="ミᵒ°", value="bong"),
+       app_commands.Choice(name="㊪", value="trung"),
+       app_commands.Choice(name="㋰", value="nhat")], 
+    chucuoi=[
+       app_commands.Choice(name="༻꧂", value="canhc"),
+       app_commands.Choice(name="ミ★", value="saoc"),
+       app_commands.Choice(name="°ᵒ彡", value="bongc"),
+       app_commands.Choice(name="㊪", value="trungc"),
+       app_commands.Choice(name="㋰", value="nhatc"),
+       app_commands.Choice(name="ᴾᴿᴼシ", value="pro"),
+       app_commands.Choice(name="⁀ᶦᵈᵒᶫ", value="idol")
+    ])
+async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.Choice[str], chucuoi: app_commands.Choice[str]):
+    await interaction.response.send_message(f'{chudau.name}{name}{chucuoi.name}')
 
 
 
