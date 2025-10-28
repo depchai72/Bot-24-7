@@ -204,14 +204,15 @@ class CounterButton(discord.ui.View):
         self.last_user = "Chưa có ai bấm <:ruabatngo:1420409581598806107>"
         self.limit = limit
 
-    @discord.ui.button(label="0", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="0", style=discord.ButtonStyle.blurple)
     async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.value >= self.limit:
             await interaction.response.send_message(f"Đã đạt giới hạn {self.limit} lượt bấm!", ephemeral=True)
             return
-        self.value += 1
         if self.last_user == interaction.user.display_name:
+            await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>")
             return
+        self.value += 1
         self.last_user = interaction.user.display_name
         button.label = str(self.value)
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
