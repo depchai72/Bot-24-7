@@ -205,7 +205,7 @@ class CounterButton(discord.ui.View):
         self.limit = limit if limit > 0 else None
 
     @discord.ui.button(label="0", style=discord.ButtonStyle.blurple)
-    async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button, gioihan: int):
+    async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if self.limit is not None and self.value >= self.limit:
             button.disabled = True
             button.style = discord.ButtonStyle.red
