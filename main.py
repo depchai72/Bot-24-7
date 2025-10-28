@@ -210,7 +210,7 @@ class CounterButton(discord.ui.View):
             await interaction.response.send_message(f"Đã đạt giới hạn {self.limit} lượt bấm!", ephemeral=True)
             return
         if self.last_user == interaction.user.display_name:
-            await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>")
+            await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>", ephemeral=True)
             return
         self.value += 1
         self.last_user = interaction.user.display_name
@@ -232,4 +232,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
