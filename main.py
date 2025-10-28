@@ -222,7 +222,7 @@ class CounterButton(discord.ui.View):
 @client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guild=GUILD_ID)
 async def counter(interaction: discord.Interaction, limit: int):
     view = CounterButton(limit)
-    await interaction.response.send_message(content="**Bấm vào nút để tăng số!**", view=CounterButton())
+    await interaction.response.send_message(content="**Bấm vào nút để tăng số!**", view=view)
 
 
 
