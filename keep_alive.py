@@ -10,7 +10,7 @@ def health_check():
 @app.route('/')
 def home():
     print("Bot song.")
-    return "Bot sống và del có lỗi"
+    return "Bot sống và del có lỗi", 200
 
 def run():
     app.run(host='0.0.0.0', port=8080)

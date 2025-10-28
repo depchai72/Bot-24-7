@@ -11,7 +11,7 @@ keep_alive()
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-print("TOKEN loaded:", bool(TOKEN))
+# print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
     def __init__(self):
