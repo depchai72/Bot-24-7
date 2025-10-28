@@ -198,16 +198,18 @@ async def chuvan(interaction: discord.Interaction, emoji: str):
 
 
 class CounterButton(discord.ui.View):
-    def __init__(self, limit=367):
+    def __init__(self, limit):
         super().__init__(timeout=None)  # timeout=None = không bao giờ tắt
         self.value = 0
         self.last_user = "Chưa có ai bấm <:ruabatngo:1420409581598806107>"
-        self.limit = limit
+        self.limit = limit if limit > 0 else None
 
     @discord.ui.button(label="0", style=discord.ButtonStyle.blurple)
-    async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if self.value >= self.limit:
-            await interaction.response.send_message(f"Đã đạt giới hạn {self.limit} lượt bấm!", ephemeral=True)
+    async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button, gioihan: int):
+        if self.limit is not None and self.value >= self.limit:
+            button.disabled = True
+            button.style = discord.ButtonStyle.red
+            await interaction.response.edit_message(content=f"Đã đạt giới hạn {self.limit} lượt bấm🎉, **người chiến thắng là: ** {self.last_user}", view=self)
             return
         if self.last_user == interaction.user.display_name:
             await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>", ephemeral=True)
@@ -218,8 +220,8 @@ class CounterButton(discord.ui.View):
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
 
 @client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guild=GUILD_ID)
-async def counter(interaction: discord.Interaction):
-    view = CounterButton()
+async def counter(interaction: discord.Interaction, limit: int):
+    view = CounterButton(limit)
     await interaction.response.send_message(content="**Bấm vào nút để tăng số!**", view=CounterButton())
 
 
