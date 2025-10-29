@@ -1,6 +1,8 @@
 import os
-import discord
 import random
+import re
+import requests
+import discord
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
@@ -224,6 +226,30 @@ class CounterButton(discord.ui.View):
 async def counter(interaction: discord.Interaction, limit: int):
     view = CounterButton(limit)
     await interaction.response.send_message(content="**Bấm vào nút để tăng số!**", view=view)
+
+
+TICTAC = "memaybeo50"
+
+@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
+async def tictac(interaction: discord.Interaction):
+    await interaction.response.defer(thinking=True)
+    try:
+       url = f"https://www.tiktok.com/@{TICTAC}"
+       headers = {
+           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+       }
+       response = requests.get(url, headers=headers, timeout=10)
+ 
+       # Regex tìm link video
+       match = re.search(r"https://www\.tiktok\.com/@[^/]+/video/\d+", response.text)
+       if match:
+           video_url = match.group(1)
+           await interaction.followup.send(f"Video mới nhất của @{TICTAC}:\n{video_url}")
+       else:
+           await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
+
+    except Exception as e:
+       await interaction.followup.send(f"❌ Lỗi khi lấy video: `{e}`")
 
 
 
