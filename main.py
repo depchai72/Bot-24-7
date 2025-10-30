@@ -234,7 +234,7 @@ async def tictac(interaction: discord.Interaction):
     await interaction.response.defer() 
 
     username = "memaybeo50"
-    api_url = "https://tiktok-scraper2.p.rapidapi.com/user/posts"
+    api_url = "https://tiktok-api23.p.rapidapi.com/user/posts"
     query = {"unique_id": username, "count": "1"}
 
     headers = {
@@ -245,21 +245,50 @@ async def tictac(interaction: discord.Interaction):
     try:
         response = requests.get(api_url, headers=headers, params=query, timeout=10)
         data = response.json()
+        print(data)  # <- dòng này giúp bạn kiểm tra cấu trúc thật khi test local
 
-        if "data" not in data or "videos" not in data["data"] or not data["data"]["videos"]:
+        videos = None
+        if "data" in data and "videos" in data["data"]:
+            videos = data["data"]["videos"]
+        elif "videos" in data:
+            videos = data["videos"]
+        elif "aweme_list" in data:
+            videos = data["aweme_list"]
+
+        if not videos:
             await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
             return
 
-        video = data["data"]["videos"][0]
-        video_url = video["play"]
-        caption = video.get("title", "(không có caption)")
+        video = videos[0]
+        video_url = video.get("play", video.get("video_url", "Không có link video"))
+        caption = video.get("title", video.get("desc", "(không có caption)"))
 
         await interaction.followup.send(
             f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}"
         )
-
     except Exception as e:
         await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{e}`")
+
+
+
+@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật", guild=GUILD_ID)
+async def nitri(interaction: discord.Interaction):
+    chuthuong = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    chuhoa = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    so = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    code = ''
+    for i in range (16):
+        ar = random.randint(1, 3)
+        if ar == 1:
+            choice = random.choice(chuthuong)
+            code = (f"{code}{choice}")
+        elif ar == 1:
+            choice = random.choice(chuhoa)
+            code = (f"{code}{choice}")
+        elif ar == 1:
+            choice = random.choice(so)
+            code = (f"{code}{choice}")
+    await interaction.response.send_message(f"https://discord.gift/{code}")
 
 
 
