@@ -228,34 +228,38 @@ async def counter(interaction: discord.Interaction, limit: int):
     await interaction.response.send_message(content="**Bấm vào nút để tăng số!**", view=view)
 
 
-TICTAC = "memaybeo50"
 
 @client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
 async def tictac(interaction: discord.Interaction):
-    await interaction.response.defer(thinking=True)
+    await interaction.response.defer() 
+
+    username = "memaybeo50"
+    api_url = "https://tiktok-scraper2.p.rapidapi.com/user/posts"
+    query = {"unique_id": username, "count": "1"}
+
+    headers = {
+        "X-RapidAPI-Key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",  # thay bằng key bạn sao chép ở Bước 1
+        "X-RapidAPI-Host": "tiktok-api23.p.rapidapi.com"
+    }
 
     try:
-        url = "https://www.tiktok.com/@memaybeo50"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
-        }
+        response = requests.get(api_url, headers=headers, params=query, timeout=10)
+        data = response.json()
 
-        response = requests.get(url, headers=headers, timeout=10)
-
-        # Kiểm tra mã trạng thái HTTP
-        if response.status_code != 200:
-            await interaction.followup.send(f"❌ TikTok trả mã lỗi {response.status_code}")
+        if "data" not in data or "videos" not in data["data"] or not data["data"]["videos"]:
+            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
             return
 
-        match = re.search(r"https://www\.tiktok\.com/@[^/]+/video/\d+", response.text)
-        if match:
-            video_url = match.group(0)
-            await interaction.followup.send(f"Video mới nhất của Depchai:\n{video_url}")
-        else:
-            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
+        video = data["data"]["videos"][0]
+        video_url = video["play"]
+        caption = video.get("title", "(không có caption)")
+
+        await interaction.followup.send(
+            f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}"
+        )
 
     except Exception as e:
-        await interaction.followup.send(f"❌ Lỗi khi lấy video: `{e}`")
+        await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{e}`")
 
 
 
@@ -267,5 +271,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
