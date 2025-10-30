@@ -43,7 +43,7 @@ class Client(commands.Bot):
         if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
-        if 'tick' in message.content:
+        if 'tick' == message.content:
             await message.add_reaction('<a:acn_tickden:1413824083413696652>')
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
@@ -208,15 +208,15 @@ class CounterButton(discord.ui.View):
 
     @discord.ui.button(label="0", style=discord.ButtonStyle.blurple)
     async def count_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if self.last_user == interaction.user.display_name:
+            await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>", ephemeral=True)
+            return
+        self.value += 1
         if self.limit is not None and self.value >= self.limit:
             button.disabled = True
             button.style = discord.ButtonStyle.red
             await interaction.response.edit_message(content=f"Đã đạt giới hạn {self.limit} lượt bấm🎉, **người chiến thắng là: ** <@{interaction.user.id}>", view=self)
             return
-        if self.last_user == interaction.user.display_name:
-            await interaction.response.send_message(f"Không được bấm 2 lần liên tục <a:sussybaka:1422928147577307166>", ephemeral=True)
-            return
-        self.value += 1
         self.last_user = interaction.user.display_name
         button.label = str(self.value)
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
@@ -237,10 +237,18 @@ async def tictac(interaction: discord.Interaction):
     api_url = "https://tiktok-api23.p.rapidapi.com/user/posts"
     query = {"unique_id": username, "count": "1"}
 
+    url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
+
+    querystring = {"secUid":"MS4wLjABAAAAqB08cUbXaDWqbD6MCga2RbGTuhfO2EsHayBYx08NDrN7IE3jQuRDNNN6YwyfH6_6","count":"35","cursor":"0"}
+
     headers = {
-        "X-RapidAPI-Key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",  # thay bằng key bạn sao chép ở Bước 1
-        "X-RapidAPI-Host": "tiktok-api23.p.rapidapi.com"
+   	   "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
+	   "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
     }
+
+    response = requests.get(url, headers=headers, params=querystring)
+
+    print(response.json())
 
     try:
         response = requests.get(api_url, headers=headers, params=query, timeout=10)
@@ -263,9 +271,7 @@ async def tictac(interaction: discord.Interaction):
         video_url = video.get("play", video.get("video_url", "Không có link video"))
         caption = video.get("title", video.get("desc", "(không có caption)"))
 
-        await interaction.followup.send(
-            f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}"
-        )
+        await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
     except Exception as e:
         await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{e}`")
 
@@ -300,5 +306,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
