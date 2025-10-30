@@ -230,26 +230,32 @@ async def counter(interaction: discord.Interaction, limit: int):
 
 TICTAC = "memaybeo50"
 
-@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
+@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai")
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
+
     try:
-       url = f"https://www.tiktok.com/@{TICTAC}"
-       headers = {
-           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
-       }
-       response = requests.get(url, headers=headers, timeout=10)
- 
-       # Regex tìm link video
-       match = re.search(r"https://www\.tiktok\.com/@[^/]+/video/\d+", response.text)
-       if match:
-           video_url = match.group(1)
-           await interaction.followup.send(f"Video mới nhất của @{TICTAC}:\n{video_url}")
-       else:
-           await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
+        url = "https://www.tiktok.com/@memaybeo50"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"
+        }
+
+        response = requests.get(url, headers=headers, timeout=10)
+
+        # Kiểm tra mã trạng thái HTTP
+        if response.status_code != 200:
+            await interaction.followup.send(f"❌ TikTok trả mã lỗi {response.status_code}")
+            return
+
+        match = re.search(r"https://www\.tiktok\.com/@[^/]+/video/\d+", response.text)
+        if match:
+            video_url = match.group(0)
+            await interaction.followup.send(f"Video mới nhất của Depchai:\n{video_url}")
+        else:
+            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
 
     except Exception as e:
-       await interaction.followup.send(f"❌ Lỗi khi lấy video: `{e}`")
+        await interaction.followup.send(f"❌ Lỗi khi lấy video: `{e}`")
 
 
 
