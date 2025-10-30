@@ -282,10 +282,10 @@ async def nitri(interaction: discord.Interaction):
         if ar == 1:
             choice = random.choice(chuthuong)
             code = (f"{code}{choice}")
-        elif ar == 1:
+        elif ar == 2:
             choice = random.choice(chuhoa)
             code = (f"{code}{choice}")
-        elif ar == 1:
+        elif ar == 3:
             choice = random.choice(so)
             code = (f"{code}{choice}")
     await interaction.response.send_message(f"https://discord.gift/{code}")
@@ -300,4 +300,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
