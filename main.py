@@ -230,7 +230,7 @@ async def counter(interaction: discord.Interaction, limit: int):
 
 TICTAC = "memaybeo50"
 
-@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai")
+@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
@@ -267,4 +267,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
