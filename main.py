@@ -231,45 +231,42 @@ async def counter(interaction: discord.Interaction, limit: int):
 
 @client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
 async def tictac(interaction: discord.Interaction):
-    await interaction.response.defer() 
+    await interaction.response.defer(thinking=True) 
 
     username = "memaybeo50"
-    api_url = "https://tiktok-api23.p.rapidapi.com/user/posts"
-    query = {"unique_id": username, "count": "1"}
-
     url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
-
-    querystring = {"secUid":"MS4wLjABAAAAqB08cUbXaDWqbD6MCga2RbGTuhfO2EsHayBYx08NDrN7IE3jQuRDNNN6YwyfH6_6","count":"35","cursor":"0"}
-
+    query = {
+             "secUid":"MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT", 
+             "count": "1", 
+             "cursor": "0"
+    }
     headers = {
    	   "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
 	   "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
     }
 
-    response = requests.get(url, headers=headers, params=querystring)
-
-    print(response.json())
-
     try:
-        response = requests.get(api_url, headers=headers, params=query, timeout=10)
+        response = requests.get(url, headers=headers, params=query, timeout=10)
         data = response.json()
-        print(data)  # <- dòng này giúp bạn kiểm tra cấu trúc thật khi test local
+        print(data)
 
-        videos = None
-        if "data" in data and "videos" in data["data"]:
-            videos = data["data"]["videos"]
-        elif "videos" in data:
-            videos = data["videos"]
-        elif "aweme_list" in data:
-            videos = data["aweme_list"]
+        videos = (
+            data.get("data", {}).get("videos")
+            or data.get("data", {}).get("aweme_list")
+            or data.get("aweme_list", [])
+        )
 
         if not videos:
             await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
             return
 
         video = videos[0]
-        video_url = video.get("play", video.get("video_url", "Không có link video"))
-        caption = video.get("title", video.get("desc", "(không có caption)"))
+        video_url = (
+            video.get("play")
+            or video.get("video_url")
+            or video.get("video", {}).get("play_addr", {}).get("url_list", [None])[0]
+        )
+        caption = video.get("title") or video.get("desc") or "(không có caption)"
 
         await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
     except Exception as e:
