@@ -1,7 +1,8 @@
 import os
 import random
 import re
-import requests
+import aiohttp
+import asyncio
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -231,24 +232,25 @@ async def counter(interaction: discord.Interaction, limit: int):
 
 @client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
 async def tictac(interaction: discord.Interaction):
-    await interaction.response.defer(thinking=True) 
+    await interaction.response.defer(thinking=True)
 
-    username = "memaybeo50"
     url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
     query = {
-             "secUid":"MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT", 
-             "count": "1", 
-             "cursor": "0"
+        "secUid": "MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT",
+        "count": "1",
+        "cursor": "0"
     }
     headers = {
-   	   "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
-	   "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
+        "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
+        "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
     }
 
     try:
-        response = requests.get(url, headers=headers, params=query, timeout=10)
-        data = response.json()
-        print(data)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, headers=headers, params=query, timeout=10) as resp:
+                data = await resp.json()
+
+        print(data)  # Debug print
 
         videos = (
             data.get("data", {}).get("videos")
@@ -257,7 +259,7 @@ async def tictac(interaction: discord.Interaction):
         )
 
         if not videos:
-            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết😰😰")
+            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết 😰😰")
             return
 
         video = videos[0]
@@ -269,8 +271,11 @@ async def tictac(interaction: discord.Interaction):
         caption = video.get("title") or video.get("desc") or "(không có caption)"
 
         await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
+
+    except asyncio.TimeoutError:
+        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok.")
     except Exception as e:
-        await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{e}`")
+        await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{type(e).__name__}: {e}`")
 
 
 
