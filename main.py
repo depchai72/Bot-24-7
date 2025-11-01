@@ -3,6 +3,7 @@ import random
 import re
 import aiohttp
 import asyncio
+import json
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -234,12 +235,9 @@ async def counter(interaction: discord.Interaction, limit: int):
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
-    url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
-    query = {
-        "secUid": "MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT",
-        "count": "1",
-        "cursor": "0"
-    }
+    username = "idtiktok"
+    url = "https://tiktok-api23.p.rapidapi.com/user/posts"
+    params = {"unique_id": username, "count": "1"}
     headers = {
         "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
         "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
@@ -247,15 +245,18 @@ async def tictac(interaction: discord.Interaction):
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, params=query, timeout=10) as resp:
-                data = await resp.json()
+            async with session.get(url, headers=headers, params=params, timeout=10) as resp:
+                text = await resp.text()
+                # Nếu phản hồi quá dài, chỉ in trước 1000 ký tự để log
+                print(text[:1000], "..." if len(text) > 1000 else "")
+                data = json.loads(text)
 
-        print(data)  # Debug print
-
+        # Tìm danh sách video (API này có thể đổi key)
         videos = (
             data.get("data", {}).get("videos")
             or data.get("data", {}).get("aweme_list")
-            or data.get("aweme_list", [])
+            or data.get("videos")
+            or data.get("aweme_list")
         )
 
         if not videos:
@@ -266,14 +267,14 @@ async def tictac(interaction: discord.Interaction):
         video_url = (
             video.get("play")
             or video.get("video_url")
-            or video.get("video", {}).get("play_addr", {}).get("url_list", [None])[0]
+            or video.get("video", {}).get("play_addr", {}).get("url_list", ["Không có video"])[0]
         )
         caption = video.get("title") or video.get("desc") or "(không có caption)"
 
         await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
 
     except asyncio.TimeoutError:
-        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok.")
+        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok")
     except Exception as e:
         await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{type(e).__name__}: {e}`")
 
