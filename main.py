@@ -311,7 +311,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
     elif thang_chet == 2:
         ngay_chet = random.randint(1, 28)
     
-    dt = datetime({nam_sinh} + {nam_chet}, {thang_chet}, {ngay_chet}, 6, 7, 41)
+    dt = datetime(nam_sinh + nam_chet, thang_chet, ngay_chet, 6, 7, 41)
     unix_time = int(dt.timestamp())
     
     ly_do = ['chết già', 'tai nạn giao thông', 'ung thư', 'bệnh tật', 'bị ám sát', 'bị đầu độc', '44']
@@ -327,5 +327,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
