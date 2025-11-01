@@ -4,6 +4,7 @@ import re
 import aiohttp
 import asyncio
 import json
+import time
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -38,14 +39,14 @@ class Client(commands.Bot):
         if self.user in message.mentions:
             await message.add_reaction('🇭')
             await message.add_reaction('🇮')
-        if message.content.startswith(f'depchai ngu'):
+        if 'depchai ngu' in message.content.lower():
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
-        if 'ban' in message.content and self.user in message.mentions:
+        elif 'ban' in message.content and self.user in message.mentions:
             await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
         if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
-        if 'tick' == message.content:
+        if 'tick' == message.content.lower():
             await message.add_reaction('<a:acn_tickden:1413824083413696652>')
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
@@ -290,15 +291,32 @@ async def nitri(interaction: discord.Interaction):
         ar = random.randint(1, 3)
         if ar == 1:
             choice = random.choice(chuthuong)
-            code = (f"{code}{choice}")
         elif ar == 2:
             choice = random.choice(chuhoa)
-            code = (f"{code}{choice}")
         elif ar == 3:
             choice = random.choice(so)
-            code = (f"{code}{choice}")
+        code = (f"{code}{choice}")
     await interaction.response.send_message(f"https://discord.gift/{code}")
 
+
+
+@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️", guild=GUILD_ID)
+async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
+    nam_chet = random.randint(1, 67)
+    thang_chet = random.randint(1, 12)
+    if thang_chet in [1,3,5,7,8,10,12]:
+        ngay_chet = random.randint(1, 31)
+    elif thang_chet in [4,6,9,11]:
+        ngay_chet = random.randint(1, 30)
+    elif thang_chet == 2:
+        ngay_chet = random.randint(1, 28)
+    
+    dt = datetime(2025+{nam_chet}, {thang_chet}, {ngay_chet}, 6, 7, 41)
+    unix_time = int(dt.timestamp())
+    
+    ly_do = ['chết già', 'tai nạn giao thông', 'ung thư', 'bệnh tật', 'bị ám sát', 'bị đầu độc', '44']
+
+    await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>")
 
 
 import time
