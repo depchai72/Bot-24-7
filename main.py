@@ -300,9 +300,23 @@ async def nitri(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️", guild=GUILD_ID)
+@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
-    nam_chet = random.randint(1, 67)
+    localtime = time.localtime(time.time())
+    nam_nay = localtime.tm_year
+    thang_nay = localtime.tm_mon
+    ngay_nay = localtime.tm_mday
+    if nam_sinh > nam_nay:
+        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        return
+    elif nam_sinh == nam_nay and thang_sinh > thang_nay:
+        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        return
+    elif nam_sinh == nam_nay and thang_sinh == thang_nay and ngay_sinh > ngay_nay:
+        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        return
+    
+    nam_chet = random.randint(1, 93)
     thang_chet = random.randint(1, 12)
     if thang_chet in [1,3,5,7,8,10,12]:
         ngay_chet = random.randint(1, 31)
@@ -314,9 +328,9 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
     dt = datetime(nam_sinh + nam_chet, thang_chet, ngay_chet, 6, 7, 41)
     unix_time = int(dt.timestamp())
     
-    ly_do = ['chết già', 'tai nạn giao thông', 'ung thư', 'bệnh tật', 'bị ám sát', 'bị đầu độc', '44']
+    ly_do = ['tuổi già', 'tai nạn', 'ung thư', 'bệnh tật', 'chết đói', 'chết đuối', 'bị ám sát', 'bị đầu độc', 'bị giết', '44']
 
-    await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>")
+    await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_sinh + nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>")
 
 
 import time
