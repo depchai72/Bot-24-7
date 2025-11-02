@@ -37,15 +37,18 @@ class Client(commands.Bot):
         if message.author == self.user:
             return
         if self.user in message.mentions:
+            if 'ban' in message.content.lower():
+               await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
+               return
             await message.add_reaction('🇭')
             await message.add_reaction('🇮')
         if 'depchai ngu' in message.content.lower():
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
-        elif 'ban' in message.content and self.user in message.mentions:
-            await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
         if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
+        if message.content.lower() == 'phản động':
+            await message.channel.send(f't-t sắp trở thành phản động<:adrenaline:1384034521497735251> \nSIÊU PHẢN ĐỘNG<:thosewhoknow:1384034450769449153> \nko sao đâu mọi người tôi đã hết phản động<:thienthan:1395022239354851348> \nbố đùa thôi<:adrianevil:1410063639641329788><:adrianevil:1410063639641329788> \nsiêu phản động cấp 3<:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778> \nxem đây, siêu phản động thần thánh<:thosewhoknew:1387391329683771402><:thosewhoknew:1387391329683771402> \nt đã đạt đc<:ruangu2:1430185957117919252> \nphản động vô cực<:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443>')
         if 'tick' == message.content.lower():
             await message.add_reaction('<a:acn_tickden:1413824083413696652>')
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
@@ -194,8 +197,26 @@ async def uhh(interaction: discord.Interaction):
 
 
 
+def is_unicode_emoji(s: str) -> bool: # chatcbd
+    emoji_pattern = re.compile(
+        "[\U0001F600-\U0001F64F"  
+        "\U0001F300-\U0001F5FF"  
+        "\U0001F680-\U0001F6FF"  
+        "\U0001F1E0-\U0001F1FF"  
+        "\U00002700-\U000027BF"  
+        "\U000024C2-\U0001F251"  
+        "]+"
+    )
+    return bool(emoji_pattern.fullmatch(s))
+def is_custom_emoji(s: str) -> bool:
+    return bool(re.fullmatch(r"<a?:\w+:\d+>", s))
+
 @client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
 async def chuvan(interaction: discord.Interaction, emoji: str):
+    if not is_custom_emoji(emoji) or is_unicode_emoji(emoji):
+        await interaction.response.send_message("del phải emoji🤬🤬😡", ephemeral = True)
+        return
+
     e = emoji
     t = '<:empty:1423996972431577240>'
     await interaction.response.send_message(f"{e}{t}{t}{e}{e}{e}{e}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{t}{t}{e}{t}{t}{t}\n{e}{e}{e}{e}{e}{e}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{t}{t}{t}{e}{t}{t}{e}\n{e}{e}{e}{e}{t}{t}{e}")
@@ -204,7 +225,7 @@ async def chuvan(interaction: discord.Interaction, emoji: str):
 
 class CounterButton(discord.ui.View):
     def __init__(self, limit):
-        super().__init__(timeout=None)  # timeout=None = không bao giờ tắt
+        super().__init__(timeout=None)  
         self.value = 0
         self.last_user = "Chưa có ai bấm <:ruabatngo:1420409581598806107>"
         self.limit = limit if limit > 0 else None
@@ -330,7 +351,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
     
     ly_do = ['tuổi già', 'tai nạn', 'ung thư', 'bệnh tật', 'chết đói', 'chết đuối', 'bị ám sát', 'bị đầu độc', 'bị giết', '44']
 
-    await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_sinh + nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>")
+    await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_sinh + nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>\nHưởng dương {nam_chet} tuổi🍚🍚🍚")
 
 
 import time
