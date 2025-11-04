@@ -323,6 +323,10 @@ async def nitri(interaction: discord.Interaction):
 
 @client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
+    if (ngay_sinh <= 0 || ngay_sinh > 31) || (thang_sinh <= 0 || thang_sinh > 12):
+        await interaction.response.send_message("Ngày sinh (hoặc tháng sinh) không đúng. Vui lòng nhập lại ngày sinh hoặc tháng sinh.")
+        print('Invalid date of birth')
+        return
     localtime = time.localtime(time.time())
     nam_nay = localtime.tm_year
     thang_nay = localtime.tm_mon
@@ -362,4 +366,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
