@@ -162,19 +162,39 @@ async def menu(interaction: discord.Interaction):
        app_commands.Choice(name="꧁༺", value="canh"),
        app_commands.Choice(name="★彡", value="sao"),
        app_commands.Choice(name="ミᵒ°", value="bong"),
+       app_commands.Choice(name="『", value="khung"),
+       app_commands.Choice(name="۝ঔৣ✞", value="longden"),
        app_commands.Choice(name="㊪", value="trung"),
-       app_commands.Choice(name="㋰", value="nhat")], 
+       app_commands.Choice(name="㋰", value="nhat"),
+       app_commands.Choice(name="☭", value="bualiem"),
+       app_commands.Choice(name="☯", value="amduong"),
+       app_commands.Choice(name="❤", value="tim")], 
     chucuoi=[
        app_commands.Choice(name="༻꧂", value="canhc"),
        app_commands.Choice(name="ミ★", value="saoc"),
        app_commands.Choice(name="°ᵒ彡", value="bongc"),
+       app_commands.Choice(name="』", value="khungc"),
+       app_commands.Choice(name="✞ঔৣ۝", value="longdenc"),
        app_commands.Choice(name="㊪", value="trungc"),
        app_commands.Choice(name="㋰", value="nhatc"),
+       app_commands.Choice(name="☭", value="bualiemc"),
+       app_commands.Choice(name="☯", value="amduongc"),
+       app_commands.Choice(name="❤", value="timc"), 
        app_commands.Choice(name="ᴾᴿᴼシ", value="pro"),
-       app_commands.Choice(name="⁀ᶦᵈᵒᶫ", value="idol")
+       app_commands.Choice(name="⁀ᶦᵈᵒᶫ", value="idol"),
+       app_commands.Choice(name="︵❻❼", value="67")
     ])
+
 async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.Choice[str], chucuoi: app_commands.Choice[str]):
-    await interaction.response.send_message(f'{chudau.name}{name}{chucuoi.name}')
+    normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    bold = "𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯" \
+           "𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕" \
+           "𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"
+
+    trans_table = str.maketrans(normal, bold)
+    bold_name = name.translate(trans_table)
+
+    await interaction.response.send_message(f'{chudau.name}{bold_name}{chucuoi.name}')
 
 
 
@@ -323,6 +343,12 @@ async def nitri(interaction: discord.Interaction):
 
 @client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
+    if (ngay_sinh <= 0 or ngay_sinh > 31):
+        await interaction.response.send_message(f"Làm del gì có ngày {ngay_sinh}😒😒", ephemeral = True)
+        return
+    elif (thang_sinh <= 0 or thang_sinh > 12):
+        await interaction.response.send_message(f"Làm del gì có tháng {thang_sinh}😒😒", ephemeral = True)
+        return
     localtime = time.localtime(time.time())
     nam_nay = localtime.tm_year
     thang_nay = localtime.tm_mon
