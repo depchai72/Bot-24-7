@@ -420,7 +420,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
        app_commands.Choice(name="💌Chưa có chủ💌", value="chua"),
        app_commands.Choice(name="💌Đã có chủ💌", value="roi")
     ])
-async def death(interaction: discord.Interaction, acc: app_commands.Choice[str], doi: app_commands.Choice[str], sothich: str, vansu: app_commands.Choice[str], ghe: app_commands.Choice[str]):
+async def bio(interaction: discord.Interaction, acc: app_commands.Choice[str], doi: app_commands.Choice[str], sothich: str, vansu: app_commands.Choice[str], ghe: app_commands.Choice[str]):
     if badwords(sothich) == True:
         await interaction.message.response.send_message('Kid cố nói từ cấm😂😂😂', ephemeral = True)
         return
@@ -443,4 +443,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
