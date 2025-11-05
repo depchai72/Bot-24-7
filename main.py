@@ -404,7 +404,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
 
 
 @client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng", guild=GUILD_ID)
-@app_commands.describe(acc="Acc chính hay phụ", doi="Ai hỏi thì m trả lời như nào", vansu="Vạn sự như nào", ny="Có gh* chưa")
+@app_commands.describe(acc="Acc chính hay phụ", doi="Ai hỏi thì m trả lời như nào", vansu="Vạn sự như nào", ghe="Có gh* chưa")
 @app_commands.choices(
     acc=[
        app_commands.Choice(name="🔰Acc chính chủ🔰", value="chinh"),
@@ -445,3 +445,4 @@ try:
 except Exception as e:
 
     print("Lỗi khi chạy bot:", e)
+
