@@ -24,7 +24,6 @@ class Client(commands.Bot):
         
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
-
         try:
             guild = discord.Object(id=1374705648234659972)
             synced = await self.tree.sync(guild=guild)
@@ -33,7 +32,7 @@ class Client(commands.Bot):
         except Exception as e:
             print(f'Error syncing commands: {e}')
 
-    async def on_message(self, message):
+    async def on_message(self, message): # autoresponses
         if message.author == self.user:
             return
         if self.user in message.mentions:
@@ -74,6 +73,26 @@ client = Client()
 GUILD_ID = discord.Object(id=1374705648234659972)
 
 
+
+# function lọc từ cấm
+tu_cam = ["nigga", "nigger", "penis", "hitler", "horny", "dildo", "pussy", "fuck", "dick", "bitch", "nude", "fatass", "porn", "boob", "cunt", "cumming", "asshole", "sperm", "cocaine", "cumshot", "nứng", "chịch", "buồi", "điếm", "cặc", "lồn", "parky", "namki", "trungki", 'tinh dịch', 'ấu dâm', 'hiếp dâm', 'thủ dâm', 'chó đẻ', 'ma túy', 'thuốc lắc', 'bắc kì', 'nam kì', 'trung kì', 'tinh trùng', 'bú vú', 'bú cu', 'cần sa']
+tu_cam_rieng = ['đĩ', 'đỉ', 'đụ', 'dái', 'địt', 'iồn', 'anal', 'cum', 'ass', 'sex', 'sexual', 'cock', 'rape', 'pedo', 'pedophiles']
+
+def badwords(word: str) -> bool:
+    text = word.lower()
+
+    for tu in tu_cam:
+        if tu in text:
+            return True
+    for tu in tu_cam_rieng:
+        if re.search(rf"\b{re.escape(tu)}\b", text):
+            return True
+
+    return False
+
+
+
+# slash commands
 @client.tree.command(name="helu", description="Heli", guild=GUILD_ID)
 async def sayHello(interaction: discord.Interaction):
     await interaction.response.send_message('Chào mấy cháu')
@@ -154,7 +173,7 @@ async def menu(interaction: discord.Interaction):
 
 
 
-
+# slash command thực sự dùng đc😂😂😂
 @client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
 @app_commands.describe(chudau="Chọn chữ đầu",chucuoi="Chọn chữ cuối")
 @app_commands.choices(
@@ -186,6 +205,9 @@ async def menu(interaction: discord.Interaction):
     ])
 
 async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.Choice[str], chucuoi: app_commands.Choice[str]):
+    if badwords(name) == True:
+        await interaction.message.response.send_message('Kid cố nói từ cấm😂😂😂', ephemeral = True)
+        return
     normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     bold = "𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯" \
            "𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕" \
@@ -217,7 +239,7 @@ async def uhh(interaction: discord.Interaction):
 
 
 
-def is_unicode_emoji(s: str) -> bool: # chatcbd
+def is_unicode_emoji(s: str) -> bool: # function kiểm tra xem input phải emoji ko
     emoji_pattern = re.compile(
         "[\U0001F600-\U0001F64F"  
         "\U0001F300-\U0001F5FF"  
@@ -344,10 +366,10 @@ async def nitri(interaction: discord.Interaction):
 @client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
     if (ngay_sinh <= 0 or ngay_sinh > 31):
-        await interaction.response.send_message(f"Làm del gì có ngày {ngay_sinh}😒😒", ephemeral = True)
+        await interaction.response.send_message(f"Làm del gì có ngày {ngay_sinh}😂😂<:dumbahh:1391405354687926273>", ephemeral = True)
         return
     elif (thang_sinh <= 0 or thang_sinh > 12):
-        await interaction.response.send_message(f"Làm del gì có tháng {thang_sinh}😒😒", ephemeral = True)
+        await interaction.response.send_message(f"Làm del gì có tháng {thang_sinh}😂😂<:dumbahh:1391405354687926273>", ephemeral = True)
         return
     localtime = time.localtime(time.time())
     nam_nay = localtime.tm_year
@@ -378,6 +400,39 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
     ly_do = ['tuổi già', 'tai nạn', 'ung thư', 'bệnh tật', 'chết đói', 'chết đuối', 'bị ám sát', 'bị đầu độc', 'bị giết', '44']
 
     await interaction.response.send_message(f"M sẽ chết vào: {ngay_chet}/{thang_chet}/{nam_sinh + nam_chet} (<t:{unix_time}:R>) ☠️☠️\nVới lý do: {random.choice(ly_do)} <:thosewhodontknow:1393572894558126121>\nHưởng dương {nam_chet} tuổi🍚🍚🍚")
+
+
+
+@client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng", guild=GUILD_ID)
+@app_commands.describe(acc="Acc chính hay phụ", doi="Ai hỏi thì m trả lời như nào", vansu="Vạn sự như nào", ny="Có gh* chưa")
+@app_commands.choices(
+    acc=[
+       app_commands.Choice(name="🔰Acc chính chủ🔰", value="chinh"),
+       app_commands.Choice(name="🔰Acc clone🔰", value="clone")], 
+    doi=[
+       app_commands.Choice(name="Đối sao đáp vậy👌", value="doidap"),
+       app_commands.Choice(name="Hỏi đâu mà đáp👌", value="aihoi")],
+    vansu=[
+       app_commands.Choice(name="🪷Vạn sự tùy duyên🪷", value="duyen"),
+       app_commands.Choice(name="☠️Vạn sự tùy TAO☠️", value="tao"),
+       app_commands.Choice(name="🪷Vạn sự như chó🪷", value="cho")],
+    ghe=[
+       app_commands.Choice(name="💌Chưa có chủ💌", value="chua"),
+       app_commands.Choice(name="💌Đã có chủ💌", value="roi")
+    ])
+async def death(interaction: discord.Interaction, acc: app_commands.Choice[str], doi: app_commands.Choice[str], sothich: str, vansu: app_commands.Choice[str], ghe: app_commands.Choice[str]):
+    if badwords(sothich) == True:
+        await interaction.message.response.send_message('Kid cố nói từ cấm😂😂😂', ephemeral = True)
+        return
+    await interaction.response.send_message(f"{acc.name}\n🍚👕🌾💵\n❤️Mê {sothich}❤️\n{vansu.name}\n{ghe.name}\n🤜Đến là đón, đụng là chạm🤛")
+# 🔰Acc chính chủ🔰
+# 🍚👕🌾💵
+# Đối sao đáp vậy👌
+# ❤️Mê xe độ❤️
+# 🪷Vạn sự tùy duyên🪷
+# 💌Chưa có chủ💌
+# 🤜Đến là đón, đụng là chạm🤛
+
 
 
 import time
