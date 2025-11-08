@@ -1,6 +1,7 @@
 import os
 import random
 import re
+import emoji
 import aiohttp
 import asyncio
 import json
@@ -239,23 +240,12 @@ async def uhh(interaction: discord.Interaction):
 
 
 
-def is_unicode_emoji(s: str) -> bool: # function kiểm tra xem input phải emoji ko
-    emoji_pattern = re.compile(
-        "[\U0001F600-\U0001F64F"  
-        "\U0001F300-\U0001F5FF"  
-        "\U0001F680-\U0001F6FF"  
-        "\U0001F1E0-\U0001F1FF"  
-        "\U00002700-\U000027BF"  
-        "\U000024C2-\U0001F251"  
-        "]+"
-    )
-    return bool(emoji_pattern.fullmatch(s))
 def is_custom_emoji(s: str) -> bool:
     return bool(re.fullmatch(r"<a?:\w+:\d+>", s))
 
 @client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
 async def chuvan(interaction: discord.Interaction, emoji: str):
-    if not is_custom_emoji(emoji) or is_unicode_emoji(emoji):
+    if is_custom_emoji(emoji) == False or emoji.is_emoji(emoji) == False:
         await interaction.response.send_message("del phải emoji🤬🤬😡", ephemeral = True)
         return
 
@@ -299,9 +289,12 @@ async def counter(interaction: discord.Interaction, limit: int):
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
-    username = "idtiktok"
-    url = "https://tiktok-api23.p.rapidapi.com/user/posts"
-    params = {"unique_id": username, "count": "1"}
+    url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
+    query = {
+        "secUid": "MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT",
+        "count": "1",
+        "cursor": "0"
+    }
     headers = {
         "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
         "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
@@ -309,18 +302,18 @@ async def tictac(interaction: discord.Interaction):
 
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, params=params, timeout=10) as resp:
-                text = await resp.text()
-                # Nếu phản hồi quá dài, chỉ in trước 1000 ký tự để log
-                print(text[:1000], "..." if len(text) > 1000 else "")
-                data = json.loads(text)
+            async with session.get(url, headers=headers, params=query, timeout=10) as response:
+                data = await response.json()
+                formatted_json = json.dumps(data, indent=2, ensure_ascii=False)
 
-        # Tìm danh sách video (API này có thể đổi key)
+        if len(formatted_json) > 1500:
+            with open('data.json', 'w', encoding='utf-8') as f:
+                f.write(formatted_json)  
+
         videos = (
             data.get("data", {}).get("videos")
             or data.get("data", {}).get("aweme_list")
-            or data.get("videos")
-            or data.get("aweme_list")
+            or data.get("aweme_list", [])
         )
 
         if not videos:
@@ -331,14 +324,14 @@ async def tictac(interaction: discord.Interaction):
         video_url = (
             video.get("play")
             or video.get("video_url")
-            or video.get("video", {}).get("play_addr", {}).get("url_list", ["Không có video"])[0]
+            or video.get("video", {}).get("play_addr", {}).get("url_list", [None])[0]
         )
         caption = video.get("title") or video.get("desc") or "(không có caption)"
 
         await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
 
     except asyncio.TimeoutError:
-        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok")
+        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok.")
     except Exception as e:
         await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{type(e).__name__}: {e}`")
 
@@ -443,6 +436,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
-
