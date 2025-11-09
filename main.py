@@ -428,6 +428,42 @@ async def bio(interaction: discord.Interaction, acc: app_commands.Choice[str], d
 
 
 
+# https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u1f923/u1f923_u1f422.png
+emoji_ranges = [
+    (0x1F600, 0x1F64F),  # Mặt cảm xúc
+    (0x1F300, 0x1F5FF),  # Biểu tượng, thiên nhiên
+    (0x1F680, 0x1F6FF),  # Giao thông
+    (0x1F900, 0x1F9FF),  # Cử chỉ, đồ vật
+    (0x1FA70, 0x1FAFF),  # Biểu tượng mở rộng
+]
+
+@client.tree.command(name="turtle_emoji", description="Ghép emoji rùa 🐢 với emoji ngẫu nhiên bất kỳ!", guild=GUILD_ID)
+async def turtle_emoji(interaction: discord.Interaction):
+    await interaction.response.defer()
+
+    turtle_unicode = "1f422"
+    url = None
+    chosen_unicode = None
+
+    async with aiohttp.ClientSession() as session:
+        for _ in range(15):  # Thử tối đa 15 emoji khác nhau
+            # Lấy emoji ngẫu nhiên từ dải Unicode
+            start, end = random.choice(emoji_ranges)
+            emoji_code = hex(random.randint(start, end))[2:]
+            url = f"https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u{emoji_code}/u{emoji_code}_u{turtle_unicode}.png"
+
+            async with session.get(url) as response:
+                if response.status != 404:
+                    chosen_unicode = emoji_code
+                    break
+        else:
+            await interaction.response.send_message("Uhhh del tìm đc thử lại xem")
+            return
+
+    await interaction.response.send_message(url)
+
+
+
 import time
 print("🕒 Đang chờ 10 giây trước khi khởi động bot...")
 time.sleep(10)
