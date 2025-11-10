@@ -245,9 +245,10 @@ def is_custom_emoji(s: str) -> bool:
 
 @client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
 async def chuvan(interaction: discord.Interaction, emoji: str):
-    if is_custom_emoji(emoji) == False or emoji.is_emoji(emoji) == False:
-        await interaction.response.send_message("del phải emoji🤬🤬😡", ephemeral = True)
-        return
+    if len(emoji) > 2:
+        if is_custom_emoji(emoji) == False:
+            await interaction.response.send_message("del phải emoji🤬🤬😡", ephemeral = True)
+            return
 
     e = emoji
     t = '<:empty:1423996972431577240>'
@@ -435,6 +436,7 @@ emoji_ranges = [
     (0x1F680, 0x1F6FF),  # Giao thông
     (0x1F900, 0x1F9FF),  # Cử chỉ, đồ vật
     (0x1FA70, 0x1FAFF),  # Biểu tượng mở rộng
+    (0x1F300, 0x1F5FF),
 ]
 
 @client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guild=GUILD_ID)
@@ -446,17 +448,17 @@ async def turtle_emoji(interaction: discord.Interaction):
     chosen_unicode = None
 
     async with aiohttp.ClientSession() as session:
-        while (6 < 7): 
+        while (6 < 7):  # Thử tối đa 15 emoji khác nhau
+            # Lấy emoji ngẫu nhiên từ dải Unicode
             start, end = random.choice(emoji_ranges)
             emoji_code = hex(random.randint(start, end))[2:]
             url = f"https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u{emoji_code}/u{emoji_code}_u{turtle_unicode}.png"
-
             async with session.get(url) as response:
                 if response.status != 404:
                     chosen_unicode = emoji_code
                     break
-
-    await interaction.response.send_message(url)
+                
+    await interaction.followup.send(url)
 
 
 
@@ -468,5 +470,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
