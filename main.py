@@ -439,15 +439,14 @@ emoji_ranges = [
 
 @client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guild=GUILD_ID)
 async def turtle_emoji(interaction: discord.Interaction):
-    await interaction.response.defer()
+    await interaction.response.defer(thinking=True)
 
     turtle_unicode = "1f422"
     url = None
     chosen_unicode = None
 
     async with aiohttp.ClientSession() as session:
-        while (6 < 7):  # Thử tối đa 15 emoji khác nhau
-            # Lấy emoji ngẫu nhiên từ dải Unicode
+        while (6 < 7): 
             start, end = random.choice(emoji_ranges)
             emoji_code = hex(random.randint(start, end))[2:]
             url = f"https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u{emoji_code}/u{emoji_code}_u{turtle_unicode}.png"
@@ -469,4 +468,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
