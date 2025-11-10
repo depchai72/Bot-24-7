@@ -369,13 +369,13 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
     thang_nay = localtime.tm_mon
     ngay_nay = localtime.tm_mday
     if nam_sinh > nam_nay:
-        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        await interaction.response.send_message("Anh bạn sinh ở ngày sinh nhật😂😂😂", ephemeral = True)
         return
     elif nam_sinh == nam_nay and thang_sinh > thang_nay:
-        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        await interaction.response.send_message("Anh bạn sinh ở ngày sinh nhật😂😂😂", ephemeral = True)
         return
     elif nam_sinh == nam_nay and thang_sinh == thang_nay and ngay_sinh > ngay_nay:
-        await interaction.response.send_message("Anh bạn sinh ở tương lai😂😂😂", ephemeral = True)
+        await interaction.response.send_message("Anh bạn sinh ở ngày sinh nhật😂😂😂", ephemeral = True)
         return
     
     nam_chet = random.randint(1, 93)
@@ -437,7 +437,7 @@ emoji_ranges = [
     (0x1FA70, 0x1FAFF),  # Biểu tượng mở rộng
 ]
 
-@client.tree.command(name="turtle_emoji", description="Ghép emoji rùa 🐢 với emoji ngẫu nhiên bất kỳ!", guild=GUILD_ID)
+@client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guild=GUILD_ID)
 async def turtle_emoji(interaction: discord.Interaction):
     await interaction.response.defer()
 
@@ -446,7 +446,7 @@ async def turtle_emoji(interaction: discord.Interaction):
     chosen_unicode = None
 
     async with aiohttp.ClientSession() as session:
-        for _ in range(15):  # Thử tối đa 15 emoji khác nhau
+        while (6 < 7):  # Thử tối đa 15 emoji khác nhau
             # Lấy emoji ngẫu nhiên từ dải Unicode
             start, end = random.choice(emoji_ranges)
             emoji_code = hex(random.randint(start, end))[2:]
@@ -456,9 +456,6 @@ async def turtle_emoji(interaction: discord.Interaction):
                 if response.status != 404:
                     chosen_unicode = emoji_code
                     break
-        else:
-            await interaction.response.send_message("Uhhh del tìm đc thử lại xem")
-            return
 
     await interaction.response.send_message(url)
 
