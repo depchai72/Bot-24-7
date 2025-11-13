@@ -1,7 +1,6 @@
 import os
 import random
 import re
-import emoji
 import aiohttp
 import asyncio
 import json
@@ -38,10 +37,10 @@ class Client(commands.Bot):
             return
         if self.user in message.mentions:
             if 'ban' in message.content.lower():
-               await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
-               return
-            await message.add_reaction('🇭')
-            await message.add_reaction('🇮')
+                await message.channel.send(f'Something bad about to happen to me💀💀☠️☠️')
+            else:
+                await message.add_reaction('🇭')
+                await message.add_reaction('🇮')
         if 'depchai ngu' in message.content.lower():
             await message.channel.send(f'Watch yo tone lil blud🙏🏿')
         if message.content.startswith('jigsaw'):
@@ -54,15 +53,6 @@ class Client(commands.Bot):
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
-        if message.content.startswith('𒈓trickortreat'):
-            await message.channel.send(f'Phần thưởng của bạn là...')
-            num = (random.randint(1,2))
-            if num==1:
-                await message.channel.send(f'1 viên kẹo🍬')
-            elif num==2:
-                await message.channel.send(f'Mute 1 phút <:thosewhodontknow:1393572894558126121>')
-                duration = timedelta(minutes=1)
-                await message.author.timeout(duration, reason = 'hjhj')
         await self.process_commands(message)
 
 intents = discord.Intents.default()
@@ -459,6 +449,43 @@ async def turtle_emoji(interaction: discord.Interaction):
                     break
                 
     await interaction.followup.send(url)
+
+
+
+teencode_map = {
+    "a": "4", "á": "4'", "à": "4`", "ạ": "4.", "ả": "4?", "ã": "4~",
+    "ă": "4", "ắ": "4'", "ằ": "4`", "ẳ": "4?", "ẵ": "4~", "ặ": "4.",
+    "â": "4", "ấ": "4'", "ầ": "4`", "ẩ": "4?", "ẫ": "4~", "ậ": "4.",
+    "b": "|3", "c": "c", "d": "])", "đ": "+)", "e": "3",
+    "ê": "3^", "g": "g", "h": "k", 
+    "i": "j", "í": "j'", "ì": "j`", "ỉ": "j?", "ĩ": "j~", "ị": "j.", 
+    "k": "]<", "l": "1", "m": "൬", "n": "π", 
+    "o": "0", "ó": "0'", "ò": "0`", "ỏ": "0?", "õ": "0~", "ọ": "0.", 
+    "ô": "0", "ố": "0'", "ồ": "0`", "ổ": "0?", "ỗ": "0~", "ộ": "0.", 
+    "ơ": "0", "ớ": "0'", "ờ": "0`", "ở": "0?", "ỡ": "0~", "ợ": "0.", 
+    "p": "p", "q": "⃀|", "r": "r", "s": "5", "t": "t", 
+    "u": "u", "ú": "u", "ù": "u", "ủ": "u", "ũ": "u", "ụ": "u", 
+    "ư": "u", "ứ": "u", "ừ": "u", "ử": "u", "ữ": "u", "ự": "u",
+    "v": "√", "x": "><", "y": "7"
+}
+
+# Hàm chuyển đổi sang teencode
+def to_teencode(text: str) -> str:
+    result = ""
+    for ch in text:
+        low = ch.lower()
+        if low in teencode_map:
+            converted = teencode_map[low]
+            # Giữ nguyên hoa/thường
+            result += converted.upper() if ch.isupper() else converted
+        else:
+            result += ch
+    return result
+
+@client.tree.command(name="teencode", description="Đổi một câu thành teencode", guild=GUILD_ID)
+async def teencode(interaction: discord.Interaction, text: str):
+    converted = to_teencode(text)
+    await interaction.response.send_message(f'{converted}')
 
 
 
