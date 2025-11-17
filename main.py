@@ -498,8 +498,8 @@ def to_tieqviet(text: str) -> str:
     result = ""
     for ch in text:
         low = ch.lower()
-        if low in teencode_map:
-            converted = teencode_map[low]
+        if low in tieqviet_map:
+            converted = tieqviet_map[low]
             # Giữ nguyên hoa/thường
             result += converted.upper() if ch.isupper() else converted
         else:
@@ -520,4 +520,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
