@@ -482,11 +482,34 @@ def to_teencode(text: str) -> str:
             result += ch
     return result
 
-@client.tree.command(name="teencode", description="Đổi một câu thành teencode", guild=GUILD_ID)
+@client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
 async def teencode(interaction: discord.Interaction, text: str):
     converted = to_teencode(text)
     await interaction.response.send_message(f'{converted}')
 
+
+
+tieqviet_map = {
+    'kh':'x', 'ch':'k', 'q':'k', 'ch':'c', 'tr':'c', 'd':'z', 'gi':'z', 'r':'z',
+    'gi':'zi', 'gí':'zí', 'gì':'zì', 'gỉ':'zỉ', 'gĩ':'zĩ', 'gị':'zị', 
+    'đ':'d', 'ph':'f', 'ng':'q', 'ngh':'q', 'gh':'g', 'th':'w', "nh":"n'"
+}
+def to_tieqviet(text: str) -> str:
+    result = ""
+    for ch in text:
+        low = ch.lower()
+        if low in teencode_map:
+            converted = teencode_map[low]
+            # Giữ nguyên hoa/thường
+            result += converted.upper() if ch.isupper() else converted
+        else:
+            result += ch
+    return result
+
+@client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
+async def tieqviet(interaction: discord.Interaction, text: str):
+    tieqviet = to_tieqviet(text)
+    await interaction.response.send_message(f'{tieqviet}')
 
 
 import time
