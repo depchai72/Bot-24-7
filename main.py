@@ -485,7 +485,7 @@ def to_teencode(text: str) -> str:
 @client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
 async def teencode(interaction: discord.Interaction, text: str):
     converted = to_teencode(text)
-    await interaction.response.send_message(f'{converted}')
+    await interaction.response.send_message(f'\{converted}')
 
 
 
@@ -496,15 +496,30 @@ tieqviet_map = {
 }
 def to_tieqviet(text: str) -> str:
     result = ""
-    for ch in text:
-        low = ch.lower()
-        if low in tieqviet_map:
-            converted = tieqviet_map[low]
-            # Giữ nguyên hoa/thường
-            result += converted.upper() if ch.isupper() else converted
-        else:
-            result += ch
-    return result
+    i = 0
+    lower_text = text.lower()
+
+    # Sắp xếp key theo độ dài giảm dần (ưu tiên match dài)
+    keys = sorted(tieqviet_map.keys(), key=len, reverse=True)
+
+    while i < len(text):
+        matched = False
+        for key in keys:
+            if lower_text[i:i+len(key)] == key:
+                converted = tieqviet_map[key]
+
+                # Giữ nguyên hoa/thường ký tự đầu tiên
+                if text[i].isupper():
+                    converted = converted.capitalize()
+
+                result += converted
+                i += len(key)
+                matched = True
+                break
+
+        if not matched:
+            result += text[i]
+            i += 1
 
 @client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
 async def tieqviet(interaction: discord.Interaction, text: str):
@@ -520,5 +535,4 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
-
     print("Lỗi khi chạy bot:", e)
