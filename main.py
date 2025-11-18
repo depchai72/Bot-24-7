@@ -487,7 +487,7 @@ def to_teencode(text: str) -> str:
 @client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
 async def teencode(interaction: discord.Interaction, text: str):
     converted = to_teencode(text)
-    await interaction.response.send_message(f'\{converted}')
+    await interaction.response.send_message(f'{converted}')
 
 
 
@@ -522,7 +522,7 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
     search = requests.get(f"https://gdbrowser.com/api/search/{query}")
     data = search.json()
     if data == -1:
-        await interaction.followup.send(f'Không tìm thấy level tên {query} trên gdbrowser')
+        await interaction.followup.send('Không tìm thấy kết quả🙄')
         return
     id = data[0]["id"]
 
@@ -549,6 +549,45 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
     await interaction.followup.send(embed=embed)
+
+
+
+@client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary", guild=GUILD_ID)
+async def dictionary(interaction: discord.Interaction, word: str):
+    await interaction.response.defer(thinking=True)
+    r = requests.get(
+        f"https://dictionary.cambridge.org/dictionary/english/{word.replace(" ", "%20")}",
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
+    soup = BeautifulSoup(r.text, "html.parser")
+
+    block = soup.find("div", class_="def ddef_d db")
+    if block:
+        definition = block.get_text(separator=" ", strip=True)
+        await interaction.followup.send(f'# {word}\n{definition}')
+    else:
+        await interaction.followup.send("Không tìm thấy kết quả🙄")
+
+
+
+@client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha", guild=GUILD_ID)
+async def tudien(interaction: discord.Interaction, word: str):
+    await interaction.response.defer(thinking=True)
+    r = requests.get(
+        f"http://tratu.soha.vn/dict/vn_vn/{word.replace(" ", "%20")}",
+        headers={"User-Agent": "Mozilla/5.0"}
+    )
+    soup = BeautifulSoup(r.text, "html.parser")
+    block = soup.find_all("span", class_="mw-headline")
+    if block:
+        for d in block:
+            parent = d.find_parent("h5")
+            if parent:   
+                dinhnghia = d.text[1:] 
+                await interaction.followup.send(f'# {word}\n{dinhnghia}')
+                return
+    else:
+        await interaction.followup.send("Không tìm thấy kết quả🙄")
 
 
 
