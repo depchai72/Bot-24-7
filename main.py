@@ -6,11 +6,14 @@ import asyncio
 import json
 import time
 import discord
+import requests
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
 from keep_alive import keep_alive
 from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
 keep_alive()
 
@@ -438,8 +441,7 @@ async def turtle_emoji(interaction: discord.Interaction):
     chosen_unicode = None
 
     async with aiohttp.ClientSession() as session:
-        while (6 < 7):  # Thử tối đa 15 emoji khác nhau
-            # Lấy emoji ngẫu nhiên từ dải Unicode
+        while (6 < 7):  
             start, end = random.choice(emoji_ranges)
             emoji_code = hex(random.randint(start, end))[2:]
             url = f"https://www.gstatic.com/android/keyboard/emojikitchen/20201001/u{emoji_code}/u{emoji_code}_u{turtle_unicode}.png"
@@ -496,35 +498,58 @@ tieqviet_map = {
 }
 def to_tieqviet(text: str) -> str:
     result = ""
-    i = 0
-    lower_text = text.lower()
-
-    # Sắp xếp key theo độ dài giảm dần (ưu tiên match dài)
-    keys = sorted(tieqviet_map.keys(), key=len, reverse=True)
-
-    while i < len(text):
-        matched = False
-        for key in keys:
-            if lower_text[i:i+len(key)] == key:
-                converted = tieqviet_map[key]
-
-                # Giữ nguyên hoa/thường ký tự đầu tiên
-                if text[i].isupper():
-                    converted = converted.capitalize()
-
-                result += converted
-                i += len(key)
-                matched = True
-                break
-
-        if not matched:
-            result += text[i]
-            i += 1
+    for ch in text:
+        low = ch.lower()
+        if low in tieqviet_map:
+            converted = tieqviet_map[low]
+            # Giữ nguyên hoa/thường
+            result += converted.upper() if ch.isupper() else converted
+        else:
+            result += ch
+    return result
 
 @client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
 async def tieqviet(interaction: discord.Interaction, text: str):
     tieqviet = to_tieqviet(text)
     await interaction.response.send_message(f'{tieqviet}')
+
+
+
+@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
+async def gdbrowser(interaction: discord.Interaction, query: str):
+    await interaction.response.defer(thinking=True)
+    query = query.replace(" ", "%20")
+    search = requests.get(f"https://gdbrowser.com/api/search/{query}")
+    data = search.json()
+    if data == -1:
+        await interaction.followup.send(f'Không tìm thấy level tên {query} trên gdbrowser')
+        return
+    id = data[0]["id"]
+
+    level = requests.get(f"https://gdbrowser.com/{id}")
+    soup = BeautifulSoup(level.text, "html.parser")
+    name = soup.find("span", attrs={"class":"pre"})
+    author1 = soup.find("a", attrs={"class":"linkButton"})
+    chiso = soup.find_all("h1", attrs={"class":"valign inline smaller spaced"})
+    img = soup.find("img", {"class": "help"}) 
+    desc = soup.find("p", attrs={"class":"pre"})
+
+    values = []
+    for tag in chiso:
+        text = tag.text.strip()
+        values.append(text)
+
+    downloads = values[0]
+    likes = values[1]
+    length = values[2]
+    icon = urljoin("https://gdbrowser.com/", img["src"])
+    author = author1.text.strip().replace("By ","")
+
+    embed = discord.Embed(title=name.text.strip(), description=f"✍️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}", color=discord.Color.yellow())
+    embed.set_thumbnail(url=icon)
+    embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
+    await interaction.followup.send(embed=embed)
+
 
 
 import time
