@@ -199,8 +199,8 @@ async def menu(interaction: discord.Interaction):
     ])
 
 async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.Choice[str], chucuoi: app_commands.Choice[str]):
-    if badwords(name) == True:
-        await interaction.message.response.send_message('Kid cố nói từ cấm😂😂😂', ephemeral = True)
+    if badwords(name):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
         return
     normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
     bold = "𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯" \
@@ -408,8 +408,8 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
        app_commands.Choice(name="💌Đã có chủ💌", value="roi")
     ])
 async def bio(interaction: discord.Interaction, acc: app_commands.Choice[str], doi: app_commands.Choice[str], sothich: str, vansu: app_commands.Choice[str], ghe: app_commands.Choice[str]):
-    if badwords(sothich) == True:
-        await interaction.message.response.send_message('Kid cố nói từ cấm😂😂😂', ephemeral = True)
+    if badwords(sothich):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
         return
     await interaction.response.send_message(f"{acc.name}\n🍚👕🌾💵\n❤️Mê {sothich}❤️\n{vansu.name}\n{ghe.name}\n🤜Đến là đón, đụng là chạm🤛")
 # 🔰Acc chính chủ🔰
@@ -486,6 +486,9 @@ def to_teencode(text: str) -> str:
 
 @client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
 async def teencode(interaction: discord.Interaction, text: str):
+    if badwords(text):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
+        return
     converted = to_teencode(text)
     await interaction.response.send_message(f'{converted}')
 
@@ -510,6 +513,9 @@ def to_tieqviet(text: str) -> str:
 
 @client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
 async def tieqviet(interaction: discord.Interaction, text: str):
+    if badwords(text):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
+        return
     tieqviet = to_tieqviet(text)
     await interaction.response.send_message(f'{tieqviet}')
 
@@ -518,8 +524,7 @@ async def tieqviet(interaction: discord.Interaction, text: str):
 @client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
 async def gdbrowser(interaction: discord.Interaction, query: str):
     await interaction.response.defer(thinking=True)
-    query = query.replace(" ", "%20")
-    search = requests.get(f"https://gdbrowser.com/api/search/{query}")
+    search = requests.get(f"https://gdbrowser.com/api/search/{query.replace(" ", "%20")}")
     data = search.json()
     if data == -1:
         await interaction.followup.send('Không tìm thấy kết quả🙄')
@@ -555,6 +560,9 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
 @client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary", guild=GUILD_ID)
 async def dictionary(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
+    if badwords(word):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
+        return
     r = requests.get(
         f"https://dictionary.cambridge.org/dictionary/english/{word.replace(" ", "%20")}",
         headers={"User-Agent": "Mozilla/5.0"}
@@ -573,6 +581,9 @@ async def dictionary(interaction: discord.Interaction, word: str):
 @client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha", guild=GUILD_ID)
 async def tudien(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
+    if badwords(word):
+        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
+        return
     r = requests.get(
         f"http://tratu.soha.vn/dict/vn_vn/{word.replace(" ", "%20")}",
         headers={"User-Agent": "Mozilla/5.0"}
