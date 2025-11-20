@@ -605,15 +605,22 @@ async def tudien(interaction: discord.Interaction, word: str):
 @client.tree.command(name="wordle", description="Chơi Wordle trong Discord", guild=GUILD_ID)
 async def wordle(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
-    localtime = time.localtime(time.time())
-    YYYY = localtime.tm_year
-    MM = localtime.tm_mon
-    DD = localtime.tm_mday
-    r = requests.get(f"https://www.nytimes.com/svc/wordle/v2/{YYYY}-{MM}-{DD}.json")
-    data = r.json()
-    if data == -1:
-        await interaction.followup.send('Bị lỗi gì đấy idk🙄')
-        return
+    while(6 < 7):
+        year = random.randint(2021, 2025)
+        mon = random.randint(1, 12)
+        day = random.randint(1, 31)
+        r = requests.get(f"https://www.nytimes.com/svc/wordle/v2/{year}-{mon:02d}-{day:02d}.json")
+        try:
+            data = r.json()
+        except:
+            continue
+
+        if data.get("status") == "ERROR":
+            continue
+
+        ans = data["solution"]
+        break
+    
     ans = data["solution"]
 
     def check(msg):
@@ -629,7 +636,7 @@ async def wordle(interaction: discord.Interaction):
                 break
             else:
                 await interaction.channel.send('Không đủ 5 kí tự <:packgod:1384036888402333726>')
-                return
+                continue
             
 
         # reset response mỗi lượt
