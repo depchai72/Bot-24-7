@@ -602,6 +602,60 @@ async def tudien(interaction: discord.Interaction, word: str):
 
 
 
+@client.tree.command(name="wordle", description="Chơi Wordle trong Discord", guild=GUILD_ID)
+async def wordle(interaction: discord.Interaction):
+    await interaction.response.defer(thinking=True)
+    localtime = time.localtime(time.time())
+    YYYY = localtime.tm_year
+    MM = localtime.tm_mon
+    DD = localtime.tm_mday
+    r = requests.get(f"https://www.nytimes.com/svc/wordle/v2/{YYYY}-{MM}-{DD}.json")
+    data = r.json()
+    if data == -1:
+        await interaction.followup.send('Bị lỗi gì đấy idk🙄')
+        return
+    ans = data["solution"]
+
+    def check(msg):
+        return msg.author.id == interaction.user.id and msg.channel.id == interaction.channel.id
+    
+    await interaction.followup.send(f"⬜⬜⬜⬜⬜\nĐoán xem <:thosewhodontknow:1393572894558126121>")
+    tries = 6
+    while tries > 0:
+        msg = await client.wait_for("message", timeout=None, check=check)
+        if len(msg.content) != 5:
+            if 'sotp' in msg.content.lower():
+                await interaction.channel.send('Okiiiii😁😁')
+                break
+            else:
+                await interaction.channel.send('Không đủ 5 kí tự <:packgod:1384036888402333726>')
+                return
+            
+
+        # reset response mỗi lượt
+        response = ['⬜'] * 5
+
+        # check từng ký tự
+        for i in range(5):
+            if msg.content[i] == ans[i]:
+                response[i] = '🟩'
+            elif msg.content[i] in ans:
+                response[i] = '🟨'
+
+        result = ''.join(response)
+        await interaction.channel.send(result)
+
+        if result == '🟩🟩🟩🟩🟩':
+            await interaction.channel.send('Ayooooo đúng rồi😹😹😹')
+            break
+
+        tries -= 1
+
+    if tries == 0:
+        await interaction.followup.send(f"Mất hết lượt<:ruachemieng:1440560108676321320>\nĐáp án là: {ans}")
+
+
+
 import time
 print("🕒 Đang chờ 10 giây trước khi khởi động bot...")
 time.sleep(10)
