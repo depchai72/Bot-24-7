@@ -168,7 +168,7 @@ async def menu(interaction: discord.Interaction):
 
 
 # slash command thực sự dùng đc😂😂😂
-@client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
+@client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai")
 @app_commands.describe(chudau="Chọn chữ đầu",chucuoi="Chọn chữ cuối")
 @app_commands.choices(
     chudau=[
@@ -214,7 +214,7 @@ async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.C
 
 
 
-@client.tree.command(name="uhh", description="Tạo 100 chữ à ừ ờ ừm ngẫu nhiên", guild=GUILD_ID)
+@client.tree.command(name="uhh", description="Tạo 100 chữ à ừ ờ ừm ngẫu nhiên")
 async def uhh(interaction: discord.Interaction):
     letters1 = ''
     for i in range(100):
@@ -236,7 +236,7 @@ async def uhh(interaction: discord.Interaction):
 def is_custom_emoji(s: str) -> bool:
     return bool(re.fullmatch(r"<a?:\w+:\d+>", s))
 
-@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
+@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn")
 async def chuvan(interaction: discord.Interaction, emoji: str):
     if len(emoji) > 2:
         if is_custom_emoji(emoji) == False:
@@ -271,7 +271,7 @@ class CounterButton(discord.ui.View):
         button.label = str(self.value)
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
 
-@client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guild=GUILD_ID)
+@client.tree.command(name="counter", description="Tạo một nút bấm đếm số")
 @app_commands.describe(limit="Số lần bấm tối đa của nút (nhập 0 nếu muốn không giới hạn)")
 async def counter(interaction: discord.Interaction, limit: int):
     view = CounterButton(limit)
@@ -331,7 +331,7 @@ async def tictac(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật", guild=GUILD_ID)
+@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật")
 async def nitri(interaction: discord.Interaction):
     chuthuong = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     chuhoa = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -350,7 +350,7 @@ async def nitri(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
+@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)")
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
     if (ngay_sinh <= 0 or ngay_sinh > 31):
         await interaction.response.send_message(f"Làm del gì có ngày {ngay_sinh}😂😂<:dumbahh:1391405354687926273>", ephemeral = True)
@@ -390,7 +390,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
 
 
 
-@client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng", guild=GUILD_ID)
+@client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng")
 @app_commands.describe(acc="Acc chính hay phụ", doi="Ai hỏi thì m trả lời như nào", vansu="Vạn sự như nào", ghe="Có gh* chưa")
 @app_commands.choices(
     acc=[
@@ -432,7 +432,7 @@ emoji_ranges = [
     (0x1F300, 0x1F5FF),
 ]
 
-@client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guild=GUILD_ID)
+@client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen")
 async def turtle_emoji(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
@@ -484,7 +484,7 @@ def to_teencode(text: str) -> str:
             result += ch
     return result
 
-@client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
+@client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode")
 async def teencode(interaction: discord.Interaction, text: str):
     if badwords(text):
         await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
@@ -501,27 +501,42 @@ tieqviet_map = {
 }
 def to_tieqviet(text: str) -> str:
     result = ""
-    for ch in text:
-        low = ch.lower()
-        if low in tieqviet_map:
-            converted = tieqviet_map[low]
-            # Giữ nguyên hoa/thường
-            result += converted.upper() if ch.isupper() else converted
-        else:
-            result += ch
+    keys = sorted(tieqviet_map.keys(), key=len, reverse=True)
+    while i < len(text):
+        matched = False
+        
+        for k in keys:
+            segment = text[i:i+len(k)]
+            
+            if segment.lower() == k:
+                converted = tieqviet_map[k]
+                # giữ nguyên chữ hoa
+                if segment.isupper():
+                    converted = converted.upper()
+                elif segment[0].isupper():
+                    converted = converted.capitalize()
+
+                result += converted
+                i += len(k)
+                matched = True
+                break
+
+        if not matched:
+            result += text[i]
+            i += 1
     return result
 
 @client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
 async def tieqviet(interaction: discord.Interaction, text: str):
     if badwords(text):
-        await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
+        await interaction.response.send_message('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
         return
     tieqviet = to_tieqviet(text)
     await interaction.response.send_message(f'{tieqviet}')
 
 
 
-@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
+@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash")
 async def gdbrowser(interaction: discord.Interaction, query: str):
     await interaction.response.defer(thinking=True)
     search = requests.get(f"https://gdbrowser.com/api/search/{query.replace(" ", "%20")}")
@@ -557,7 +572,7 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
 
 
 
-@client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary", guild=GUILD_ID)
+@client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary")
 async def dictionary(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
     if badwords(word):
@@ -572,13 +587,13 @@ async def dictionary(interaction: discord.Interaction, word: str):
     block = soup.find("div", class_="def ddef_d db")
     if block:
         definition = block.get_text(separator=" ", strip=True)
-        await interaction.followup.send(f'# {word}\n{definition}')
+        await interaction.followup.send(f'# {word.capitalize()}\n{definition.capitalize()}')
     else:
         await interaction.followup.send("Không tìm thấy kết quả🙄")
 
 
 
-@client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha", guild=GUILD_ID)
+@client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha")
 async def tudien(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
     if badwords(word):
@@ -595,14 +610,14 @@ async def tudien(interaction: discord.Interaction, word: str):
             parent = d.find_parent("h5")
             if parent:   
                 dinhnghia = d.text[1:] 
-                await interaction.followup.send(f'# {word}\n{dinhnghia}')
+                await interaction.followup.send(f'# {word.capitalize()}\n{dinhnghia.capitalize()}')
                 return
     else:
         await interaction.followup.send("Không tìm thấy kết quả🙄")
 
 
 
-@client.tree.command(name="wordle", description="Chơi Wordle trong Discord", guild=GUILD_ID)
+@client.tree.command(name="wordle", description="Chơi Wordle trong Discord")
 async def wordle(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     while(6 < 7):
@@ -628,11 +643,12 @@ async def wordle(interaction: discord.Interaction):
     
     await interaction.followup.send(f"⬜⬜⬜⬜⬜\nĐoán xem <:thosewhodontknow:1393572894558126121>")
     tries = 6
+    coroi = []
     while tries > 0:
         msg = await client.wait_for("message", timeout=None, check=check)
         if len(msg.content) != 5:
-            if 'sotp' in msg.content.lower():
-                await interaction.channel.send('Okiiiii😁😁')
+            if 'sotp' in msg.content.lower() or 'cút' in msg.content.lower() or 'chịu' in msg.content.lower():
+                await interaction.channel.send(f'Okiiiii😁😁\nĐáp án là: {ans}')
                 break
             else:
                 await interaction.channel.send('Không đủ 5 kí tự <:packgod:1384036888402333726>')
@@ -644,9 +660,9 @@ async def wordle(interaction: discord.Interaction):
 
         # check từng ký tự
         for i in range(5):
-            if msg.content[i] == ans[i]:
+            if msg[i].lower() == ans[i]:
                 response[i] = '🟩'
-            elif msg.content[i] in ans:
+            elif msg[i].lower() in ans:
                 response[i] = '🟨'
 
         result = ''.join(response)
@@ -659,7 +675,7 @@ async def wordle(interaction: discord.Interaction):
         tries -= 1
 
     if tries == 0:
-        await interaction.followup.send(f"Mất hết lượt<:ruachemieng:1440560108676321320>\nĐáp án là: {ans}")
+        await interaction.channel.send(f"Mất hết lượt<:ruachemieng:1440560108676321320>\nĐáp án là: {ans}")
 
 
 
