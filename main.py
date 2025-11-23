@@ -7,6 +7,7 @@ import json
 import time
 import discord
 import requests
+import tempfile
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
@@ -283,51 +284,22 @@ async def counter(interaction: discord.Interaction, limit: int):
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
-    url = "https://tiktok-api23.p.rapidapi.com/api/user/posts"
-    query = {
-        "secUid": "MS4wLjABAAAA33Mt9xN9BHIgR2sreDHAGn3xkHC5kdgU54_VUmup_MjtZPxve1VzIX_UMtGCmbxT",
-        "count": "1",
-        "cursor": "0"
-    }
+    url = "https://tiktok-scraper7.p.rapidapi.com/user/posts"
+    querystring = {"user_id":"7146137203961070618","count":"10","cursor":"0"}
     headers = {
         "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
-        "x-rapidapi-host": "tiktok-api23.p.rapidapi.com"
+        "x-rapidapi-host": "tiktok-scraper7.p.rapidapi.com"
     }
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    video = ['data']['videos'][0]['play']
 
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=headers, params=query, timeout=10) as response:
-                data = await response.json()
-                formatted_json = json.dumps(data, indent=2, ensure_ascii=False)
 
-        if len(formatted_json) > 1500:
-            with open('data.json', 'w', encoding='utf-8') as f:
-                f.write(formatted_json)  
+    if video == -1:
+        await interaction.followup.send("Không tìm thấy video nào, có thể depchai đã chết😰😰")
+        return 
+    await interaction.followup.send(f"Video mới nhất của Depchai:\n{video}")
 
-        videos = (
-            data.get("data", {}).get("videos")
-            or data.get("data", {}).get("aweme_list")
-            or data.get("aweme_list", [])
-        )
-
-        if not videos:
-            await interaction.followup.send("Không tìm thấy video nào, có thể Depchai đã chết 😰😰")
-            return
-
-        video = videos[0]
-        video_url = (
-            video.get("play")
-            or video.get("video_url")
-            or video.get("video", {}).get("play_addr", {}).get("url_list", [None])[0]
-        )
-        caption = video.get("title") or video.get("desc") or "(không có caption)"
-
-        await interaction.followup.send(f"**Video mới nhất của Depchai:**\n{caption}\n{video_url}")
-
-    except asyncio.TimeoutError:
-        await interaction.followup.send("⚠️ Hết thời gian chờ phản hồi từ API TikTok.")
-    except Exception as e:
-        await interaction.followup.send(f"⚠️ Lỗi khi lấy video: `{type(e).__name__}: {e}`")
 
 
 
