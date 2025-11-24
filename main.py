@@ -7,7 +7,6 @@ import json
 import time
 import discord
 import requests
-import tempfile
 from discord.ext import commands
 from discord import app_commands
 from dotenv import load_dotenv
@@ -15,6 +14,7 @@ from keep_alive import keep_alive
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+import io
 
 keep_alive()
 
@@ -292,13 +292,14 @@ async def tictac(interaction: discord.Interaction):
     }
     response = requests.get(url, headers=headers, params=querystring)
     data = response.json()
-    video = ['data']['videos'][0]['play']
+    video = data['data']['videos'][0]['play']
 
-
+    r = requests.get(video)
+    bytes_mp4 = io.BytesIO(r.content)
     if video == -1:
         await interaction.followup.send("Không tìm thấy video nào, có thể depchai đã chết😰😰")
         return 
-    await interaction.followup.send(f"Video mới nhất của Depchai:\n{video}")
+    await interaction.followup.send(f"Video mới nhất của Depchai:\n", file=discord.File(bytes_mp4, filename="video.mp4"))
 
 
 
@@ -433,7 +434,7 @@ teencode_map = {
     "b": "|3", "c": "c", "d": "])", "đ": "+)", "e": "3",
     "ê": "3^", "g": "g", "h": "k", 
     "i": "j", "í": "j'", "ì": "j`", "ỉ": "j?", "ĩ": "j~", "ị": "j.", 
-    "k": "]<", "l": "1", "m": "൬", "n": "π", 
+    "k": "]<", "l": "1", "m": "m", "n": "π", 
     "o": "0", "ó": "0'", "ò": "0`", "ỏ": "0?", "õ": "0~", "ọ": "0.", 
     "ô": "0", "ố": "0'", "ồ": "0`", "ổ": "0?", "ỗ": "0~", "ộ": "0.", 
     "ơ": "0", "ớ": "0'", "ờ": "0`", "ở": "0?", "ỡ": "0~", "ợ": "0.", 
@@ -474,7 +475,7 @@ tieqviet_map = {
 def to_tieqviet(text: str) -> str:
     result = ""
     keys = sorted(tieqviet_map.keys(), key=len, reverse=True)
-    while i < len(text):
+    for i in range(len(text)):
         matched = False
         
         for k in keys:
@@ -607,15 +608,12 @@ async def wordle(interaction: discord.Interaction):
 
         ans = data["solution"]
         break
-    
-    ans = data["solution"]
 
     def check(msg):
         return msg.author.id == interaction.user.id and msg.channel.id == interaction.channel.id
     
     await interaction.followup.send(f"⬜⬜⬜⬜⬜\nĐoán xem <:thosewhodontknow:1393572894558126121>")
     tries = 6
-    coroi = []
     while tries > 0:
         msg = await client.wait_for("message", timeout=None, check=check)
         if len(msg.content) != 5:
@@ -630,9 +628,9 @@ async def wordle(interaction: discord.Interaction):
 
         # check từng ký tự
         for i in range(5):
-            if msg[i].lower() == ans[i]:
+            if msg.content[i].lower() == ans[i]:
                 response[i] = '🟩'
-            elif msg[i].lower() in ans:
+            elif msg.content[i].lower() in ans:
                 response[i] = '🟨'
 
         result = ''.join(response)
