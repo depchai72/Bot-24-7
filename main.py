@@ -539,7 +539,7 @@ def searchlvl(query:str, count: int):
     data = search.json()
     if data == -1:
         return None
-    if count > len(id):
+    if count > len(data):
         return None
     id = data[count]["id"]
     return id
