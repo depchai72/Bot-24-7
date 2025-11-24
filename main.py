@@ -509,16 +509,7 @@ async def tieqviet(interaction: discord.Interaction, text: str):
 
 
 
-@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
-async def gdbrowser(interaction: discord.Interaction, query: str):
-    await interaction.response.defer(thinking=True)
-    search = requests.get(f"https://gdbrowser.com/api/search/{query.replace(" ", "%20")}")
-    data = search.json()
-    if data == -1:
-        await interaction.followup.send('Không tìm thấy kết quả🙄')
-        return
-    id = data[0]["id"]
-
+def level(id: int): 
     level = requests.get(f"https://gdbrowser.com/{id}")
     soup = BeautifulSoup(level.text, "html.parser")
     name = soup.find("span", attrs={"class":"pre"})
@@ -538,10 +529,58 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
     icon = urljoin("https://gdbrowser.com/", img["src"])
     author = author1.text.strip().replace("By ","")
 
-    embed = discord.Embed(title=name.text.strip(), description=f"✍️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}", color=discord.Color.yellow())
+    embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}", color=discord.Color.yellow())
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
-    await interaction.followup.send(embed=embed)
+    return embed
+
+def searchlvl(query:str, count: int):
+    search = requests.get(f"https://gdbrowser.com/api/search/{query.replace(" ", "%20")}")
+    data = search.json()
+    if data == -1:
+        return None
+    id = data[count]["id"]
+    return id
+
+class nextlvl(discord.ui.View):
+    def __init__(self, query: str, thutu: int):
+        super().__init__()
+        self.thutu = thutu
+        self.query = query
+    @discord.ui.button(label="", style=discord.ButtonStyle.blurple, emoji='⬅️')
+    async def back(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.defer()
+        self.thutu -= 1
+        if self.thutu < 0:
+            await interaction.response.send_message('Đang ở đầu trang🥱', ephemeral = True)
+            self.thutu = 0
+            return
+        h = searchlvl(self.query, self.thutu)
+        if h == None:
+            await interaction.followup.send('Không tìm thấy kết quả🙄')
+            return
+        await interaction.message.edit(embed=level(h), view = self)
+    @discord.ui.button(label="", style=discord.ButtonStyle.blurple, emoji='➡️')
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.defer()
+        self.thutu += 1
+        if self.thutu > 10:
+            await interaction.response.send_message('Đến cuối trang rồi🥱', ephemeral = True)
+            self.thutu -= 1
+            return
+        h = searchlvl(self.query, self.thutu)
+        if h == None:
+            await interaction.followup.send('Không tìm thấy kết quả🙄')
+            return
+        await interaction.message.edit(embed=level(h), view = self)
+
+@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
+async def gdbrowser(interaction: discord.Interaction, query: str):
+    await interaction.response.defer(thinking=True)
+    id = searchlvl(query, 0)
+    if id == None:
+        await interaction.followup.send('Không tìm thấy kết quả🙄')
+    await interaction.followup.send(embed=level(id), view = nextlvl(query, 1))
 
 
 
@@ -587,7 +626,7 @@ async def tudien(interaction: discord.Interaction, word: str):
                 return
     else:
         await interaction.followup.send("Không tìm thấy kết quả🙄")
-
+    
 
 
 @client.tree.command(name="wordle", description="Chơi Wordle với từ ngẫu nhiên", guild=GUILD_ID)
