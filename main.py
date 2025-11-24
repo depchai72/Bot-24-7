@@ -539,6 +539,8 @@ def searchlvl(query:str, count: int):
     data = search.json()
     if data == -1:
         return None
+    if count > len(id):
+        return None
     id = data[count]["id"]
     return id
 
@@ -552,25 +554,19 @@ class nextlvl(discord.ui.View):
         await interaction.response.defer()
         self.thutu -= 1
         if self.thutu < 0:
-            await interaction.response.send_message('Đang ở đầu trang🥱', ephemeral = True)
+            await interaction.channel.send('Đang ở đầu trang🥱', ephemeral = True)
             self.thutu = 0
             return
         h = searchlvl(self.query, self.thutu)
-        if h == None:
-            await interaction.followup.send('Không tìm thấy kết quả🙄')
-            return
         await interaction.message.edit(embed=level(h), view = self)
     @discord.ui.button(label="", style=discord.ButtonStyle.blurple, emoji='➡️')
     async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.defer()
         self.thutu += 1
-        if self.thutu > 10:
-            await interaction.response.send_message('Đến cuối trang rồi🥱', ephemeral = True)
-            self.thutu -= 1
-            return
         h = searchlvl(self.query, self.thutu)
         if h == None:
-            await interaction.followup.send('Không tìm thấy kết quả🙄')
+            await interaction.channel.send('Đến cuối trang rồi🥱', ephemeral = True)
+            self.thutu -= 1
             return
         await interaction.message.edit(embed=level(h), view = self)
 
@@ -580,7 +576,7 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
     id = searchlvl(query, 0)
     if id == None:
         await interaction.followup.send('Không tìm thấy kết quả🙄')
-    await interaction.followup.send(embed=level(id), view = nextlvl(query, 1))
+    await interaction.followup.send(embed=level(id), view = nextlvl(query, 0))
 
 
 
