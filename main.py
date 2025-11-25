@@ -517,6 +517,8 @@ def level(id: int):
     chiso = soup.find_all("h1", attrs={"class":"valign inline smaller spaced"})
     img = soup.find("img", {"class": "help"}) 
     desc = soup.find("p", attrs={"class":"pre"})
+    songname = soup.find('h1', attrs={'class':'pre slightlySmaller'})
+    songauthor1 = soup.find('h2', attrs={'class':'pre smaller'})
 
     values = []
     for tag in chiso:
@@ -528,8 +530,9 @@ def level(id: int):
     length = values[2]
     icon = urljoin("https://gdbrowser.com/", img["src"])
     author = author1.text.strip().replace("By ","")
+    songauthor = songauthor1.text.strip().replace("By: ", "")
 
-    embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}", color=discord.Color.yellow())
+    embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {songname.text.strip()} - {songauthor}", color=discord.Color.yellow())
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
     return embed
@@ -554,7 +557,7 @@ class nextlvl(discord.ui.View):
         await interaction.response.defer()
         self.thutu -= 1
         if self.thutu < 0:
-            await interaction.channel.send('Đang ở đầu trang🥱', ephemeral = True)
+            await interaction.followup.send('Đang ở đầu trang🥱', ephemeral = True)
             self.thutu = 0
             return
         h = searchlvl(self.query, self.thutu)
@@ -565,7 +568,7 @@ class nextlvl(discord.ui.View):
         self.thutu += 1
         h = searchlvl(self.query, self.thutu)
         if h == None:
-            await interaction.channel.send('Đến cuối trang rồi🥱', ephemeral = True)
+            await interaction.followup.send('Đến cuối trang rồi🥱', ephemeral = True)
             self.thutu -= 1
             return
         await interaction.message.edit(embed=level(h), view = self)
