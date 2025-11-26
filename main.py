@@ -535,6 +535,7 @@ def level(id: int):
     embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {songname.text.strip()} - {songauthor}", color=discord.Color.yellow())
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
+    embed.set_thumbnail(url=f'https://levelthumbs.prevter.me/thumbnail/{id}')
     return embed
 
 def searchlvl(query:str, count: int):
