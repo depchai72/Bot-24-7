@@ -46,7 +46,7 @@ class Client(commands.Bot):
                 await message.add_reaction('🇭')
                 await message.add_reaction('🇮')
         if 'depchai ngu' in message.content.lower():
-            await message.channel.send(f'Watch yo tone lil blud🙏🏿')
+            await message.channel.send(f'Watch yo tone <@{message.author.id}>🙏🏿')
         if message.content.startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
@@ -59,6 +59,7 @@ class Client(commands.Bot):
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
         await self.process_commands(message)
 
+#cài đặt gì đấy idk
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -651,7 +652,8 @@ async def wordle(interaction: discord.Interaction):
     def check(msg):
         return msg.author.id == interaction.user.id and msg.channel.id == interaction.channel.id
     
-    await interaction.followup.send(f"⬜⬜⬜⬜⬜\nĐoán xem <:thosewhodontknow:1393572894558126121>")
+    await interaction.followup.send(f"⬜⬜⬜⬜⬜")
+    await interaction.channel.send('Đoán xem <:thosewhodontknow:1393572894558126121>')
     tries = 6
     while tries > 0:
         msg = await client.wait_for("message", timeout=None, check=check)
