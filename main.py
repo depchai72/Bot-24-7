@@ -25,7 +25,7 @@ print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="$", intents=intents)
+        super().__init__(command_prefix="𒈓", intents=intents)
         
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
@@ -66,7 +66,7 @@ intents.message_content = True
 intents.members = True
 intents.guilds = True
 client = Client()
-
+bot = commands.Bot(command_prefix="𒈓", intents=intents)
 GUILD_ID = discord.Object(id=1374705648234659972)
 
 
@@ -752,6 +752,61 @@ async def flag(interaction: discord.Interaction):
             wrong += 1
 
     await interaction.channel.send(f'M đã đoán đúng {correct} lần và sai {wrong} lần <:votay:1421701691316895854><:votay:1421701691316895854><:votay:1421701691316895854>')
+
+
+
+#copy trên zootube
+COLORS = {
+    (0, 0, 0): "⬛",
+    (0, 0, 255): "🟦",
+    (255, 0, 0): "🟥",
+    (255, 255, 0): "🟨",
+    (190, 100, 80):  "🟫",
+    (255, 165, 0): "🟧",
+    (160, 140, 210): "🟪",
+    (255, 255, 255): "⬜",
+    (0, 255, 0): "🟩",
+}
+
+
+def euclidean_distance(c1, c2):
+    r1, g1, b1 = c1
+    r2, g2, b2 = c2
+    d = ((r2 - r1) ** 2 + (g2 - g1) ** 2 + (b2 - b1) ** 2) ** 0.5
+
+    return d
+
+
+def find_closest_emoji(color):
+    c = sorted(list(COLORS), key=lambda k: euclidean_distance(color, k))
+    return COLORS[c[0]]
+
+
+def emojify_image(img, size=14):
+
+    WIDTH, HEIGHT = (size, size)
+    small_img = img.resize((WIDTH, HEIGHT), Image.NEAREST)
+
+    emoji = ""
+    small_img = small_img.load()
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            emoji += find_closest_emoji(small_img[x, y])
+        emoji += "\n"
+    return emoji
+
+@client.command()
+async def emojify(ctx, url: str, size: int = 16):
+    def get_emojified_image():
+            r = requests.get(url, stream=True)
+            image = Image.open(r.raw).convert("RGB")
+            res = emojify_image(image, size)
+
+            if size > 32:
+                res = 'To quá <:ruachemieng:1440560108676321320>'
+            return res
+    result = get_emojified_image()
+    await ctx.send(result)
 
 
 
