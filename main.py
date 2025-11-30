@@ -745,10 +745,10 @@ async def flag(interaction: discord.Interaction):
             await interaction.channel.send('Chính xác <a:a_tickvang:1422566122305097830>')
             correct += 1
         elif msg.content.lower().startswith('idk') or msg.content.lower().startswith('cút') or msg.content.lower().startswith('chịu') or msg.content.lower().startswith('sotp'):
-            await interaction.channel.send(f'Okiiiii😁😁\nĐáp án là: {ans}')
+            await interaction.channel.send(f'Okiiiii😁😁 đáp án là: {ans}')
             return
         else:
-            await interaction.channel.send('Sai <:cuoiteghe:1432707173892231288>')
+            await interaction.channel.send(f'Sai <:cuoiteghe:1432707173892231288><:cuoiteghe:1432707173892231288><:cuoiteghe:1432707173892231288> đáp án là: {ans}')
             wrong += 1
 
     await interaction.channel.send(f'M đã đoán đúng {correct} lần và sai {wrong} lần <:votay:1421701691316895854><:votay:1421701691316895854><:votay:1421701691316895854>')
@@ -807,6 +807,10 @@ async def emojify(ctx, url: str, size: int = 16):
             return res
     result = get_emojified_image()
     await ctx.send(result)
+
+@client.command()
+async def help(ctx):
+    await ctx.send('Muốn dừng `/wordle` hoặc `/guess_that_flag` thì ghi sotp hoặc chịu hoặc cút hoặc idk')
 
 
 
