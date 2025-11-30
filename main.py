@@ -808,10 +808,6 @@ async def emojify(ctx, url: str, size: int = 16):
     result = get_emojified_image()
     await ctx.send(result)
 
-@client.command()
-async def help(ctx):
-    await ctx.send('Muốn dừng `/wordle` hoặc `/guess_that_flag` thì ghi sotp hoặc chịu hoặc cút hoặc idk')
-
 
 
 import time
