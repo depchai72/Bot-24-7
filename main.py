@@ -25,7 +25,7 @@ print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="𒈓", intents=intents)
+        super().__init__(command_prefix=["𒈓", "$"], intents=intents)
         
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
@@ -66,10 +66,16 @@ intents.message_content = True
 intents.members = True
 intents.guilds = True
 client = Client()
-bot = commands.Bot(command_prefix="𒈓", intents=intents)
 GUILD_ID = discord.Object(id=1374705648234659972)
 
 
+
+#cho bot ko ping đc everyone
+allowed = discord.AllowedMentions(
+    everyone=False,
+    roles=False,
+    users=True
+)
 
 # function lọc từ cấm
 tu_cam = ["nigga", "nigger", "penis", "hitler", "horny", "dildo", "pussy", "fuck", "dick", "bitch", "nude", "fatass", "porn", "boob", "cunt", "cumming", "asshole", "sperm", "cocaine", "cumshot", "nứng", "chịch", "buồi", "điếm", "cặc", "lồn", "parky", "namki", "trungki", 'tinh dịch', 'ấu dâm', 'hiếp dâm', 'thủ dâm', 'chó đẻ', 'ma túy', 'thuốc lắc', 'bắc kì', 'nam kì', 'trung kì', 'tinh trùng', 'bú vú', 'bú cu', 'cần sa']
@@ -86,6 +92,70 @@ def badwords(word: str) -> bool:
             return True
 
     return False
+
+
+
+# lệnh bằng prefix
+@client.hybrid_command()
+async def sync(ctx):
+    try:
+        synced = await client.tree.sync(guild=ctx.guild)
+        await ctx.send(f'Đã động bộ {len(synced)} lệnh vào {ctx.guild}')
+
+    except Exception as e:
+        print(f'Lỗi khi đồng bộ lệnh: {e}')
+        await ctx.send('M có cục sạc nào ko bot t chết rồi')
+
+
+
+COLORS = { #copy trên zootube
+    (0, 0, 0): "⬛",
+    (0, 0, 255): "🟦",
+    (255, 0, 0): "🟥",
+    (255, 255, 0): "🟨",
+    (190, 100, 80):  "🟫",
+    (255, 165, 0): "🟧",
+    (160, 140, 210): "🟪",
+    (255, 255, 255): "⬜",
+    (0, 255, 0): "🟩",
+}
+
+def euclidean_distance(c1, c2):
+    r1, g1, b1 = c1
+    r2, g2, b2 = c2
+    d = ((r2 - r1) ** 2 + (g2 - g1) ** 2 + (b2 - b1) ** 2) ** 0.5
+
+    return d
+
+def find_closest_emoji(color):
+    c = sorted(list(COLORS), key=lambda k: euclidean_distance(color, k))
+    return COLORS[c[0]]
+
+def emojify_image(img, size=14):
+
+    WIDTH, HEIGHT = (size, size)
+    small_img = img.resize((WIDTH, HEIGHT), Image.NEAREST)
+
+    emoji = ""
+    small_img = small_img.load()
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            emoji += find_closest_emoji(small_img[x, y])
+        emoji += "\n"
+    return emoji
+
+@client.command()
+async def emojify(ctx, url: str, size: int = 16):
+    def get_emojified_image():
+            r = requests.get(url, stream=True)
+            image = Image.open(r.raw).convert("RGB")
+            res = emojify_image(image, size)
+
+            if size > 32:
+                res = 'To quá 😰😰'
+            return res
+    result = get_emojified_image()
+    await ctx.send(result)
 
 
 
@@ -170,12 +240,6 @@ async def menu(interaction: discord.Interaction):
 
 
 
-allowed = discord.AllowedMentions(
-        everyone=False,
-        roles=False,
-        users=True
-    )
-
 # slash command thực sự dùng đc😂😂😂
 @client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
 @app_commands.describe(chudau="Chọn chữ đầu",chucuoi="Chọn chữ cuối")
@@ -247,7 +311,7 @@ def is_custom_emoji(s: str) -> bool:
 
 @client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
 async def chuvan(interaction: discord.Interaction, emoji: str):
-    if len(emoji) > 2:
+    if len(emoji.strip()) > 1:
         if is_custom_emoji(emoji) == False:
             await interaction.response.send_message("del phải emoji🤬🤬😡", ephemeral = True)
             return
@@ -280,7 +344,7 @@ class CounterButton(discord.ui.View):
         button.label = str(self.value)
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
 
-@client.tree.command(name="counter", description="Tạo một nút bấm đếm số")
+@client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guild=GUILD_ID)
 @app_commands.describe(limit="Số lần bấm tối đa của nút (nhập 0 nếu muốn không giới hạn)")
 async def counter(interaction: discord.Interaction, limit: int):
     view = CounterButton(limit)
@@ -741,10 +805,10 @@ async def flag(interaction: discord.Interaction):
             await interaction.channel.send('Đây là cờ nước gì?', file=discord.File(flag_img, filename='flag.png'))            
 
         msg = await client.wait_for("message", timeout=None, check=check)
-        if msg.content.lower().startswith(ans.lower()) == True:
+        if msg.content.lower().strip() == ans.lower():
             await interaction.channel.send('Chính xác <a:a_tickvang:1422566122305097830>')
             correct += 1
-        elif msg.content.lower().startswith('idk') or msg.content.lower().startswith('cút') or msg.content.lower().startswith('chịu') or msg.content.lower().startswith('sotp'):
+        elif msg.content.lower().strip() == 'sotp' or msg.content.lower().strip() == 'chịu' or msg.content.lower().strip() == 'cút':
             await interaction.channel.send(f'Okiiiii😁😁 đáp án là: {ans}')
             return
         else:
@@ -752,61 +816,6 @@ async def flag(interaction: discord.Interaction):
             wrong += 1
 
     await interaction.channel.send(f'M đã đoán đúng {correct} lần và sai {wrong} lần <:votay:1421701691316895854><:votay:1421701691316895854><:votay:1421701691316895854>')
-
-
-
-#copy trên zootube
-COLORS = {
-    (0, 0, 0): "⬛",
-    (0, 0, 255): "🟦",
-    (255, 0, 0): "🟥",
-    (255, 255, 0): "🟨",
-    (190, 100, 80):  "🟫",
-    (255, 165, 0): "🟧",
-    (160, 140, 210): "🟪",
-    (255, 255, 255): "⬜",
-    (0, 255, 0): "🟩",
-}
-
-
-def euclidean_distance(c1, c2):
-    r1, g1, b1 = c1
-    r2, g2, b2 = c2
-    d = ((r2 - r1) ** 2 + (g2 - g1) ** 2 + (b2 - b1) ** 2) ** 0.5
-
-    return d
-
-
-def find_closest_emoji(color):
-    c = sorted(list(COLORS), key=lambda k: euclidean_distance(color, k))
-    return COLORS[c[0]]
-
-
-def emojify_image(img, size=14):
-
-    WIDTH, HEIGHT = (size, size)
-    small_img = img.resize((WIDTH, HEIGHT), Image.NEAREST)
-
-    emoji = ""
-    small_img = small_img.load()
-    for y in range(HEIGHT):
-        for x in range(WIDTH):
-            emoji += find_closest_emoji(small_img[x, y])
-        emoji += "\n"
-    return emoji
-
-@client.command()
-async def emojify(ctx, url: str, size: int = 16):
-    def get_emojified_image():
-            r = requests.get(url, stream=True)
-            image = Image.open(r.raw).convert("RGB")
-            res = emojify_image(image, size)
-
-            if size > 32:
-                res = 'To quá <:ruachemieng:1440560108676321320>'
-            return res
-    result = get_emojified_image()
-    await ctx.send(result)
 
 
 
