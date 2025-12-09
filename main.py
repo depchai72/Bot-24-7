@@ -309,7 +309,7 @@ async def uhh(interaction: discord.Interaction):
 def is_custom_emoji(s: str) -> bool:
     return bool(re.fullmatch(r"<a?:\w+:\d+>", s))
 
-@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
+@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn")
 async def chuvan(interaction: discord.Interaction, emoji: str):
     if len(emoji.strip()) > 1:
         if is_custom_emoji(emoji) == False:
@@ -376,7 +376,7 @@ async def tictac(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật", guild=GUILD_ID)
+@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật")
 async def nitri(interaction: discord.Interaction):
     chuthuong = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     chuhoa = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
