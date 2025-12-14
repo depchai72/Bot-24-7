@@ -607,10 +607,10 @@ def level(id: int):
     if songauthor in songname.text:
         song = songname
     else:
-        song = f'{songname} - {songauthor}'
+        song = f'{songname.text.strip()} - {songauthor}'
 
-    if '#' in top.text:
-        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🏆 Hạng: {top.text.replace("#","")}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
+    if not '[[DEMONLIST]]' in top.text:
+        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🏆 Hạng: {top.text}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
     else:
         embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
     embed.set_thumbnail(url=icon)
