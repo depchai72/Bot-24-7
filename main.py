@@ -591,6 +591,7 @@ def level(id: int):
     desc = soup.find("p", attrs={"class":"pre"})
     songname = soup.find('h1', attrs={'class':'pre slightlySmaller'})
     songauthor1 = soup.find('h2', attrs={'class':'pre smaller'})
+    top = soup.find('h1', attrs={'class': 'smaller inline demonList'})
 
     values = []
     for tag in chiso:
@@ -603,8 +604,15 @@ def level(id: int):
     icon = urljoin("https://gdbrowser.com/", img["src"])
     author = author1.text.strip().replace("By ","")
     songauthor = songauthor1.text.strip().replace("By: ", "")
+    if songauthor in songname.text:
+        song = songname
+    else:
+        song = f'{songname} - {songauthor}'
 
-    embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {songname.text.strip()} - {songauthor}", color=discord.Color.yellow())
+    if '#' in top.text:
+        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🏆 Hạng: {top.text.replace("#","")}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
+    else:
+        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
     embed.set_image(url=f'https://levelthumbs.prevter.me/thumbnail/{id}')
