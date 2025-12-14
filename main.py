@@ -47,8 +47,8 @@ class Client(commands.Bot):
                 await message.add_reaction('🇭')
                 await message.add_reaction('🇮')
         if 'depchai ngu' in message.content.lower():
-            await message.channel.send(f'Watch yo tone <@{message.author.id}>🙏🏿')
-        if message.content.startswith('jigsaw'):
+            await message.channel.send(f'Watch yo tung tung TOUNGE sahur <@{message.author.id}>🙏🏿')
+        if message.content.lower().startswith('jigsaw'):
             await message.channel.send(f'Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send(f'Oh hell na yo ás tweakin jigsaw😰😰')
         if message.content.lower() == 'phản động':
@@ -58,6 +58,14 @@ class Client(commands.Bot):
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
+        if message.content.lower().startswith('ai hỏi'):
+            await message.channel.send('https://tenor.com/view/yes-hi-smells-good-done-cooking-stinky-gif-13460406')
+        if 'degloved' in message.content.lower():
+            await message.channel.send('https://media.discordapp.net/attachments/1421006466445348904/1449692117638058096/IMG_9643.jpeg?ex=693fd27e&is=693e80fe&hm=ec9aedb412f7517351f59c19b84eb5cc5ef50f0de338724ecf66e9217c858dde&=&format=webp&width=1020&height=930')
+        if 'tôi yêu depchai' in message.content.lower():
+            await message.channel.send('https://tenor.com/view/patrick-bateman-sigma-joker-lightning-god-patrick-bateman-sigma-edit-gif-11768805784532291762')
+        if 'tôi ghét depchai' in message.content.lower():
+            await message.channel.send('https://cdn.discordapp.com/attachments/1374705648796827671/1448973547044212829/image0.gif')
         await self.process_commands(message)
 
 #cài đặt gì đấy idk
@@ -605,7 +613,7 @@ def level(id: int):
     author = author1.text.strip().replace("By ","")
     songauthor = songauthor1.text.strip().replace("By: ", "")
     if songauthor in songname.text:
-        song = songname
+        song = songname.text.strip()
     else:
         song = f'{songname.text.strip()} - {songauthor}'
 
@@ -828,11 +836,11 @@ async def flag(interaction: discord.Interaction):
 
 
 @client.tree.command(name="tiktok_mp4", description="Gửi video Tiktok dưới dạng video", guild=GUILD_ID)
-async def tictac_mp4(interaction: discord.Interaction, linkvideo: str):
+async def tictac_mp4(interaction: discord.Interaction, link: str):
     await interaction.response.defer()
 
     url = "https://tiktok-scraper2.p.rapidapi.com/video/no_watermark"
-    querystring = {"video_url":linkvideo}
+    querystring = {"video_url":link}
     headers = {
         "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
         "x-rapidapi-host": "tiktok-scraper2.p.rapidapi.com"
