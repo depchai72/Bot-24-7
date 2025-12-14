@@ -819,6 +819,32 @@ async def flag(interaction: discord.Interaction):
 
 
 
+@client.tree.command(name="tiktok_mp4", description="Gửi video Tiktok dưới dạng video", guild=GUILD_ID)
+async def tictac_mp4(interaction: discord.Interaction, linkvideo: str):
+    await interaction.response.defer()
+
+    url = "https://tiktok-scraper2.p.rapidapi.com/video/no_watermark"
+    querystring = {"video_url":linkvideo}
+    headers = {
+        "x-rapidapi-key": "c52e6c1eabmshfc53df3be70d170p15736ejsn41970f974d03",
+        "x-rapidapi-host": "tiktok-scraper2.p.rapidapi.com"
+    }
+
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    if data:
+        video = data['no_watermark']
+        if video:
+            r = requests.get(video)
+        else:
+            r = requests.get(data)
+        bytes_mp4 = io.BytesIO(r.content)
+        await interaction.followup.send(file=discord.File(bytes_mp4, filename='tiktok.mp4'))
+    else:
+        await interaction.followup.send('Del tìm thấy video nào🙄')
+
+
+
 import time
 print("🕒 Đang chờ 10 giây trước khi khởi động bot...")
 time.sleep(10)
