@@ -66,6 +66,9 @@ class Client(commands.Bot):
             await message.channel.send('https://tenor.com/view/patrick-bateman-sigma-joker-lightning-god-patrick-bateman-sigma-edit-gif-11768805784532291762')
         if 'tôi ghét depchai' in message.content.lower():
             await message.channel.send('https://cdn.discordapp.com/attachments/1374705648796827671/1448973547044212829/image0.gif')
+        if 'i hate epstein' in message.content.lower():
+            embed = discord.Embed(title="🔄Translating🔄", description="I didn't get invited to his island.", color=discord.Color.blue())
+            await message.channel.send(embed)
         await self.process_commands(message)
 
 #cài đặt gì đấy idk
@@ -617,10 +620,30 @@ def level(id: int):
     else:
         song = f'{songname.text.strip()} - {songauthor}'
 
+    diff = img["title"]
+    if 'Extreme Demon' in diff or 'Insane Demon' in diff or 'Hard Demon' in diff:
+        color=discord.Color.dark_red()
+    elif 'Medium Demon' in diff:
+        color=discord.Color.purple()
+    elif 'Easy Demon' in diff:
+        color=discord.Color.dark_purple()
+    elif 'Insane' in diff:
+        color=discord.Color.pink()
+    elif 'Harder' in diff:
+        color=discord.Color.red()
+    elif 'Hard' in diff:
+        color=discord.Color.gold()
+    elif 'Normal' in diff:
+        color=discord.Color.green()
+    elif 'Easy' in diff:
+        color=discord.Color.blue()
+    elif 'Unrated' in diff:
+        color=discord.Color.light_grey()
+
     if not '[[DEMONLIST]]' in top.text:
-        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🏆 Hạng: {top.text}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
+        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🏆 Hạng: {top.text}\n🎵 Nhạc: {song}", color=color)
     else:
-        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {song}", color=discord.Color.yellow())
+        embed = discord.Embed(title=name.text.strip(), description=f"🛠️ Tác giả: {author}\n⤵️ Downloads: {downloads}\n👍 Likes: {likes}\n🕓 Độ dài: {length}\n🎵 Nhạc: {song}", color=color)
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
     embed.set_image(url=f'https://levelthumbs.prevter.me/thumbnail/{id}')
