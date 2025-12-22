@@ -68,7 +68,7 @@ class Client(commands.Bot):
             await message.channel.send('https://cdn.discordapp.com/attachments/1374705648796827671/1448973547044212829/image0.gif')
         if 'i hate epstein' in message.content.lower():
             embed = discord.Embed(title="🔄Translating🔄", description="I didn't get invited to his island.", color=discord.Color.blue())
-            await message.channel.send(embed)
+            await message.channel.send(embed=embed)
         await self.process_commands(message)
 
 #cài đặt gì đấy idk
@@ -892,4 +892,5 @@ try:
     client.run(TOKEN)
     print("mẹ ơi con làm được rồi🥹🥹")
 except Exception as e:
+
     print("Lỗi khi chạy bot:", e)
