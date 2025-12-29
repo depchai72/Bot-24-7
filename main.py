@@ -21,7 +21,7 @@ keep_alive()
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-hi = os.getenv('hjhj')
+hi = os.getenv('hjhj').split(",")
 print("TOKEN loaded:", bool(TOKEN))
 
 class Client(commands.Bot):
@@ -31,9 +31,11 @@ class Client(commands.Bot):
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
         try:
-            guild = discord.Object(id=1374705648234659972)
-            synced = await self.tree.sync(guild=guild)
-            print(f'Đã động bộ {len(synced)} lệnh vào guild {guild.id}')
+            guilds = [1374705648234659972] #1380776258014543996
+            for i in guilds:
+                gui=discord.Object(id=i)
+                synced = await self.tree.sync(guild=gui)
+                print(f'Đã động bộ {len(synced)} lệnh vào guild {i}')
 
         except Exception as e:
             print(f'Lỗi khi đồng bộ lệnh: {e}')
@@ -55,13 +57,13 @@ class Client(commands.Bot):
         if message.content.lower() == 'phản động':
             await message.channel.send(f't-t sắp trở thành phản động<:adrenaline:1384034521497735251> \nSIÊU PHẢN ĐỘNG<:thosewhoknow:1384034450769449153> \nko sao đâu mọi người tôi đã hết phản động<:thienthan:1395022239354851348> \nbố đùa thôi<:adrianevil:1410063639641329788><:adrianevil:1410063639641329788> \nsiêu phản động cấp 3<:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778> \nxem đây, siêu phản động thần thánh<:thosewhoknew:1387391329683771402><:thosewhoknew:1387391329683771402> \nt đã đạt đc<:ruangu2:1430185957117919252> \nphản động vô cực<:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443>')
         if 'tôi ghét depchai' in message.content.lower():
-            await message.channel.send(f'Khoan dừng khoảng chừng là 2 giây<:ruachemieng:1440560108676321320><:ruamat:1444591264728092774>\nĐể nó biết ông chủ nó là ai đây<:phonk:1446439575445835939><:thosewhoknow:1384034450769449153>\nHater mây mờ cho nó phơi thây<:adrenaline:1384034521497735251><:trollfacelv999:1384893983850893443>\nNgười trong quan tài sống lại vài con dơi bay<:thesewhoknow:1391269951977033778><:thosewhoknew:1387391329683771402>')
+            await message.channel.send(f'Khoan dừng khoảng chừng là 2 giây<:ruachemieng:1440560108676321320><:ruamat:1444591264728092774>\nĐể nó biết ông chủ nó là ai đây<:phonk:1446439575445835939><:thosewhoknow:1384034450769449153>\nHater mây mờ cho nó phơi thây<:adrenaline:1384034521497735251><:trollfacelv999:1384893983850893443>\nBên trong quan tài sống lại vài con dơi bay<:thesewhoknow:1391269951977033778><:thosewhoknew:1387391329683771402>')
         if 'tick' == message.content.lower():
             await message.add_reaction('<a:acn_tickden:1413824083413696652>')
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
-        if message.content.lower().startswith('ai hỏi'):
+        if message.content.lower() == ('ai hỏi'):
             await message.channel.send('https://tenor.com/view/yes-hi-smells-good-done-cooking-stinky-gif-13460406')
         if 'degloved' in message.content.lower():
             await message.channel.send('https://media.discordapp.net/attachments/1421006466445348904/1449692117638058096/IMG_9643.jpeg?ex=693fd27e&is=693e80fe&hm=ec9aedb412f7517351f59c19b84eb5cc5ef50f0de338724ecf66e9217c858dde&=&format=webp&width=1020&height=930')
@@ -69,12 +71,15 @@ class Client(commands.Bot):
             await message.channel.send('https://tenor.com/view/patrick-bateman-sigma-joker-lightning-god-patrick-bateman-sigma-edit-gif-11768805784532291762')
         if 'ai ghét depchai' in message.content.lower():
             await message.channel.send('https://media.discordapp.net/attachments/1374705648796827671/1454325901214093312/IMG_4474.png?ex=6950ae0a&is=694f5c8a&hm=0b18c041326f4d85758dd6d9d00a89db06b079b9dc53651656327b883022cb5e&=&format=webp&quality=lossless&width=1526&height=800')
+        if 'wish i knew' in message.content.lower():
+            await message.channel.send("https://tenor.com/view/scp-wish-i-knew-scp-wish-i-knew-gif-3623425954504276893")
         if 'i hate epstein' in message.content.lower():
             embed = discord.Embed(title="🔄 Translating 🔄", description="I didn't get invited to his island.", color=discord.Color.blue())
             await message.channel.send(embed=embed)
         for i in hi:
-            if re.search(rf"\b{re.escape(i)}\b", message.content.lower):
+            if re.search(rf"\b{re.escape(i)}\b", message.content.lower()):
                 await message.delete(delay=None)
+                break
         await self.process_commands(message)
 
 #cài đặt gì đấy idk
@@ -83,7 +88,10 @@ intents.message_content = True
 intents.members = True
 intents.guilds = True
 client = Client()
-GUILD_ID = discord.Object(id=1374705648234659972)
+GUILD_ID = [
+    discord.Object(id=1374705648234659972),
+    discord.Object(id=1380776258014543996)
+]
 
 
 
@@ -177,13 +185,13 @@ async def emojify(ctx, url: str, size: int = 16):
 
 
 # slash commands
-@client.tree.command(name="helu", description="Heli", guild=GUILD_ID)
+@client.tree.command(name="helu", description="Heli", guilds=GUILD_ID)
 async def sayHello(interaction: discord.Interaction):
     await interaction.response.send_message('Chào mấy cháu')
 
 
 
-@client.tree.command(name="embed", description="Tạo embed", guild=GUILD_ID)
+@client.tree.command(name="embed", description="Tạo embed", guilds=GUILD_ID)
 async def embed(interaction: discord.Interaction):
     embed = discord.Embed(title="Depchai", url="https://www.youtube.com/watch?v=dQw4w9WgXcQ", description="T la Depchai", color=discord.Color.yellow())
     embed.set_thumbnail(url="https://media.discordapp.net/attachments/1374705648796827671/1431545974748086463/image0.png?ex=68fdce95&is=68fc7d15&hm=0f1ff4b2dcdee8df798cdb6472631c61d2d5ef2d00bac97580496ef22a515015&=&format=webp&quality=lossless&width=668&height=668")
@@ -208,7 +216,7 @@ class View(discord.ui.View):
     async def button_rua(self, button, interaction):
         await button.response.send_message("Rùa ko làm gì m :3", ephemeral=True)
 
-@client.tree.command(name="button", description="Nút", guild=GUILD_ID)
+@client.tree.command(name="button", description="Nút", guilds=GUILD_ID)
 async def nut(interaction: discord.Interaction):
     await interaction.response.send_message("Hãy chọn nút đúng", view=View())
 
@@ -251,14 +259,14 @@ class MenuView(discord.ui.View):
         super().__init__()
         self.add_item(Menu())
 
-@client.tree.command(name="menu", description="Menu", guild=GUILD_ID)
+@client.tree.command(name="menu", description="Menu", guilds=GUILD_ID)
 async def menu(interaction: discord.Interaction):
     await interaction.response.send_message(view=MenuView())
 
 
 
 # slash command thực sự dùng đc😂😂😂
-@client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guild=GUILD_ID)
+@client.tree.command(name="free_fire_name_generator", description="Tạo tên fi fai", guilds=GUILD_ID)
 @app_commands.describe(chudau="Chọn chữ đầu",chucuoi="Chọn chữ cuối")
 @app_commands.choices(
     chudau=[
@@ -304,7 +312,7 @@ async def ff(interaction: discord.Interaction, name: str, chudau: app_commands.C
 
 
 
-@client.tree.command(name="uhh", description="Tạo 100 chữ à ừ ờ ừm ngẫu nhiên", guild=GUILD_ID)
+@client.tree.command(name="uhh", description="Tạo 100 chữ à ừ ờ ừm ngẫu nhiên", guilds=GUILD_ID)
 async def uhh(interaction: discord.Interaction):
     letters1 = ''
     for i in range(100):
@@ -326,7 +334,7 @@ async def uhh(interaction: discord.Interaction):
 def is_custom_emoji(s: str) -> bool:
     return bool(re.fullmatch(r"<a?:\w+:\d+>", s))
 
-@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guild=GUILD_ID)
+@client.tree.command(name="chuvan", description="Sắp xếp một emoji thành chữ vạn", guilds=GUILD_ID)
 async def chuvan(interaction: discord.Interaction, emoji: str):
     if len(emoji.strip()) > 1:
         if is_custom_emoji(emoji) == False:
@@ -361,7 +369,7 @@ class CounterButton(discord.ui.View):
         button.label = str(self.value)
         await interaction.response.edit_message(content=f"**Người bấm gần nhất:** {self.last_user}", view=self)
 
-@client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guild=GUILD_ID)
+@client.tree.command(name="counter", description="Tạo một nút bấm đếm số", guilds=GUILD_ID)
 @app_commands.describe(limit="Số lần bấm tối đa của nút (nhập 0 nếu muốn không giới hạn)")
 async def counter(interaction: discord.Interaction, limit: int):
     view = CounterButton(limit)
@@ -369,7 +377,7 @@ async def counter(interaction: discord.Interaction, limit: int):
 
 
 
-@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guild=GUILD_ID)
+@client.tree.command(name="videomoi", description="Xem video mới nhất của Depchai", guilds=GUILD_ID)
 async def tictac(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
@@ -393,7 +401,7 @@ async def tictac(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật", guild=GUILD_ID)
+@client.tree.command(name="nitro_generator", description="Tạo một link Discord gift ngẫu nhiên và cầu nguyện rằng nó là nitro thật", guilds=GUILD_ID)
 async def nitri(interaction: discord.Interaction):
     chuthuong = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
     chuhoa = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -412,7 +420,7 @@ async def nitri(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guild=GUILD_ID)
+@client.tree.command(name="death_date", description="Dự đoán ngày m chết☠️☠️ (j4f)", guilds=GUILD_ID)
 async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: int, nam_sinh: int):
     if (ngay_sinh <= 0 or ngay_sinh > 31):
         await interaction.response.send_message(f"Làm del gì có ngày {ngay_sinh}😂😂<:dumbahh:1391405354687926273>", ephemeral = True)
@@ -452,7 +460,7 @@ async def death(interaction: discord.Interaction, ngay_sinh: int, thang_sinh: in
 
 
 
-@client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng", guild=GUILD_ID)
+@client.tree.command(name="bio_generator", description="Tạo một bio mà sẽ del ai dùng", guilds=GUILD_ID)
 @app_commands.describe(acc="Acc chính hay phụ", doi="Ai hỏi thì m trả lời như nào", vansu="Vạn sự như nào", ghe="Có gh* chưa")
 @app_commands.choices(
     acc=[
@@ -494,7 +502,7 @@ emoji_ranges = [
     (0x1F300, 0x1F5FF),
 ]
 
-@client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guild=GUILD_ID)
+@client.tree.command(name="turtle_emoji", description="Lấy emoji rùa ngẫu nhiên từ emoji kitchen", guilds=GUILD_ID)
 async def turtle_emoji(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
 
@@ -546,7 +554,7 @@ def to_teencode(text: str) -> str:
             result += ch
     return result
 
-@client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guild=GUILD_ID)
+@client.tree.command(name="teencode", description="Chuyển đổi Tiếng Việt sang teencode", guilds=GUILD_ID)
 async def teencode(interaction: discord.Interaction, text: str):
     if badwords(text):
         await interaction.followup.send('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
@@ -588,7 +596,7 @@ def to_tieqviet(text: str) -> str:
             i += 1
     return result
 
-@client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guild=GUILD_ID)
+@client.tree.command(name="tieq_viet", description="Chuyển đổi Tiếng Việt truyền thống sang Tiếq Việt", guilds=GUILD_ID)
 async def tieqviet(interaction: discord.Interaction, text: str):
     if badwords(text):
         await interaction.response.send_message('nuh uh<:ruachemieng:1440560108676321320>', ephemeral=True)
@@ -653,6 +661,7 @@ def level(id: int):
     embed.set_thumbnail(url=icon)
     embed.add_field(name="Mô tả", value=desc.text.strip(), inline=False)
     embed.set_image(url=f'https://levelthumbs.prevter.me/thumbnail/{id}')
+    embed.set_footer(text = f"ID: {id}")
     return embed
 
 def searchlvl(query:str, count: int):
@@ -691,7 +700,7 @@ class nextlvl(discord.ui.View):
             return
         await interaction.message.edit(embed=level(h), view = self)
 
-@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guild=GUILD_ID)
+@client.tree.command(name="gdbrowser", description="Tìm thông tin của một level trong Geometry Dash", guilds=GUILD_ID)
 async def gdbrowser(interaction: discord.Interaction, query: str):
     await interaction.response.defer(thinking=True)
     id = searchlvl(query, 0)
@@ -701,7 +710,7 @@ async def gdbrowser(interaction: discord.Interaction, query: str):
 
 
 
-@client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary", guild=GUILD_ID)
+@client.tree.command(name="dictionary", description="Tìm định nghĩa của một từ tiếng Anh trên Cambridge Dictionary", guilds=GUILD_ID)
 async def dictionary(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
     if badwords(word):
@@ -722,7 +731,7 @@ async def dictionary(interaction: discord.Interaction, word: str):
 
 
 
-@client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha", guild=GUILD_ID)
+@client.tree.command(name="tudien", description="Tìm định nghĩa của một từ tiếng Việt trên tratu.soha", guilds=GUILD_ID)
 async def tudien(interaction: discord.Interaction, word: str):
     await interaction.response.defer(thinking=True)
     if badwords(word):
@@ -746,7 +755,7 @@ async def tudien(interaction: discord.Interaction, word: str):
     
 
 
-@client.tree.command(name="wordle", description="Chơi Wordle với từ ngẫu nhiên", guild=GUILD_ID)
+@client.tree.command(name="wordle", description="Chơi Wordle với từ ngẫu nhiên", guilds=GUILD_ID)
 async def wordle(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     while(6 < 7):
@@ -804,7 +813,7 @@ async def wordle(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="guess_that_flag", description="Đoán lá cờ", guild=GUILD_ID)
+@client.tree.command(name="guess_that_flag", description="Đoán lá cờ", guilds=GUILD_ID)
 async def flag(interaction: discord.Interaction):
     await interaction.response.defer(thinking=True)
     countries = {
@@ -864,7 +873,7 @@ async def flag(interaction: discord.Interaction):
 
 
 
-@client.tree.command(name="tiktok_mp4", description="Gửi video Tiktok dưới dạng video", guild=GUILD_ID)
+@client.tree.command(name="tiktok_mp4", description="Gửi video Tiktok dưới dạng video", guilds=GUILD_ID)
 async def tictac_mp4(interaction: discord.Interaction, link: str):
     await interaction.response.defer()
 
@@ -891,7 +900,7 @@ async def tictac_mp4(interaction: discord.Interaction, link: str):
 
 
 DEPCHAI = 1011257705031274536
-@client.tree.command(name='feedback', description="Gửi góp ý đến depchai", guild=GUILD_ID)
+@client.tree.command(name='feedback', description="Gửi góp ý đến depchai", guilds=GUILD_ID)
 async def feedback(interaction: discord.Interaction, message: str):
     await interaction.response.send_message("<a:acn_tickden:1413824083413696652> Gửi góp ý thành công")
 
