@@ -51,18 +51,20 @@ class Client(commands.Bot):
                 await message.add_reaction('🇮')
         if 'depchai ngu' in message.content.lower():
             await message.channel.send(f'Watch yo tung tung TOUNGE sahur <@{message.author.id}>🙏🏿')
-        if message.content.lower().startswith('jigsaw'):
+        if message.content.lower() == 'jigsaw':
             await message.channel.send('Yo final challenge: let you bih go through yo phone!!!!')
             await message.channel.send('Oh hell na yo ás tweakin jigsaw😰😰')
         if message.content.lower() == 'phản động':
             await message.channel.send(f't-t sắp trở thành phản động<:adrenaline:1384034521497735251> \nSIÊU PHẢN ĐỘNG<:thosewhoknow:1384034450769449153> \nko sao đâu mọi người tôi đã hết phản động<:thienthan:1395022239354851348> \nbố đùa thôi<:adrianevil:1410063639641329788><:adrianevil:1410063639641329788> \nsiêu phản động cấp 3<:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778><:thesewhoknow:1391269951977033778> \nxem đây, siêu phản động thần thánh<:thosewhoknew:1387391329683771402><:thosewhoknew:1387391329683771402> \nt đã đạt đc<:ruangu2:1430185957117919252> \nphản động vô cực<:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443><:trollfacelv999:1384893983850893443>')
         if 'tôi ghét depchai' in message.content.lower():
             await message.channel.send(f'Khoan dừng khoảng chừng là 2 giây<:ruachemieng:1440560108676321320><:ruamat:1444591264728092774>\nĐể nó biết ông chủ nó là ai đây<:phonk:1446439575445835939><:thosewhoknow:1384034450769449153>\nHater mây mờ cho nó phơi thây<:adrenaline:1384034521497735251><:trollfacelv999:1384893983850893443>\nBên trong quan tài sống lại vài con dơi bay<:thesewhoknow:1391269951977033778><:thosewhoknew:1387391329683771402>')
+        
         if 'tick' == message.content.lower():
             await message.add_reaction('<a:acn_tickden:1413824083413696652>')
             await message.add_reaction('<a:acn_tickxanh:1414079548341096520>')
             await message.add_reaction('<a:acn_tickhong:1416068644349411420>')
             await message.add_reaction('<a:a_tickvang:1422566122305097830>')
+
         if message.content.lower() == ('ai hỏi'):
             await message.channel.send('https://tenor.com/view/yes-hi-smells-good-done-cooking-stinky-gif-13460406')
         if 'degloved' in message.content.lower():
@@ -73,9 +75,13 @@ class Client(commands.Bot):
             await message.channel.send('https://media.discordapp.net/attachments/1374705648796827671/1454325901214093312/IMG_4474.png?ex=6950ae0a&is=694f5c8a&hm=0b18c041326f4d85758dd6d9d00a89db06b079b9dc53651656327b883022cb5e&=&format=webp&quality=lossless&width=1526&height=800')
         if 'wish i knew' in message.content.lower():
             await message.channel.send("https://tenor.com/view/scp-wish-i-knew-scp-wish-i-knew-gif-3623425954504276893")
+        if message.content.lower().startswith('thằng nào đây'):
+            await message.channel.send("https://media.discordapp.net/attachments/1374705648796827671/1455067797787775178/Screenshot_20251217_182230_TikTok.jpg?ex=695360fc&is=69520f7c&hm=0049013fa84da10beddffdbb13f14bcb9eaee825b610203ef1777c280a5b3b59&=&format=webp&width=1349&height=750")
+        
         if 'i hate epstein' in message.content.lower():
             embed = discord.Embed(title="🔄 Translating 🔄", description="I didn't get invited to his island.", color=discord.Color.blue())
             await message.channel.send(embed=embed)
+
         for i in hi:
             if re.search(rf"\b{re.escape(i)}\b", message.content.lower()):
                 await message.delete(delay=None)
