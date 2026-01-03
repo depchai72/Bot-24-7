@@ -31,7 +31,7 @@ class Client(commands.Bot):
     async def on_ready(self):
         print(f'Hello ae t là {self.user}!')
         try:
-            guilds = [1374705648234659972] #1380776258014543996
+            guilds = [1374705648234659972, 1380776258014543996] #
             for i in guilds:
                 gui=discord.Object(id=i)
                 synced = await self.tree.sync(guild=gui)
@@ -81,11 +81,12 @@ class Client(commands.Bot):
         if 'i hate epstein' in message.content.lower():
             embed = discord.Embed(title="🔄 Translating 🔄", description="I didn't get invited to his island.", color=discord.Color.blue())
             await message.channel.send(embed=embed)
-
-        for i in hi:
-            if re.search(rf"\b{re.escape(i)}\b", message.content.lower()):
-                await message.delete(delay=None)
-                break
+            
+        if message.guild.id == 1374705648234659972:
+            for i in hi:
+                if re.search(rf"\b{re.escape(i)}\b", message.content.lower()):
+                    await message.delete(delay=None)
+                    break
         await self.process_commands(message)
 
 #cài đặt gì đấy idk
@@ -188,6 +189,22 @@ async def emojify(ctx, url: str, size: int = 16):
     result = get_emojified_image()
     await ctx.send(result)
 
+
+
+@client.command()
+async def z(ctx, *, message: str):
+    if badwords(message):
+        await ctx.message.delete()
+        return
+    try:
+        await ctx.message.delete()
+        await ctx.send(
+            message,
+            allowed_mentions=allowed 
+        )
+
+    except Exception as e:
+        await ctx.send(f"Lỗi: {e}")
 
 
 # slash commands
@@ -872,7 +889,7 @@ async def flag(interaction: discord.Interaction):
             await interaction.channel.send(f'Okiiiii😁😁 đáp án là: {ans}')
             return
         else:
-            await interaction.channel.send(f'Sai <:cuoiteghe:1432707173892231288><:cuoiteghe:1432707173892231288><:cuoiteghe:1432707173892231288> đáp án là: {ans}')
+            await interaction.channel.send(f'Sai <:cuoiteghe:1454649885495263416><:cuoiteghe:1454649885495263416><:cuoiteghe:1454649885495263416> đáp án là: {ans}')
             wrong += 1
 
     await interaction.channel.send(f'M đã đoán đúng {correct} lần và sai {wrong} lần <:votay:1421701691316895854><:votay:1421701691316895854><:votay:1421701691316895854>')
